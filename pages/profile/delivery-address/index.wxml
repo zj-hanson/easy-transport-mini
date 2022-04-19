@@ -1,0 +1,25 @@
+<!--pages/profile/address/index.wxml-->
+<view class="container">
+  <view class="card">
+    <form bindsubmit="formSubmit" bindreset="formReset">
+      <van-cell-group>
+        <van-field label="联系人" value="{{ wechatUser.name }}" placeholder="请输入联系人" bind:change="bindNameChange" />
+      </van-cell-group>
+      <van-cell-group>
+        <van-field value="{{ wechatUser.phone }}" label="手机号" placeholder="请输入手机号" bind:change="bindPhoneChange" use-button-slot>
+        </van-field>
+      </van-cell-group>
+      <van-cell-group>
+        <van-field label="公司全称" value="{{ wechatUser.name }}" placeholder="请输入联系人" bind:change="bindNameChange" />
+      </van-cell-group>
+      <van-cell-group>
+        <van-field label="公司简称" value="{{ wechatUser.name }}" placeholder="请输入联系人" bind:change="bindNameChange" />
+      </van-cell-group>
+      <van-cell-group>
+        <van-field label="详细地址" type="textarea" value="{{ wechatUser.role }}" placeholder="详细地址" clearable="{{true}}" autosize
+      rows="5" bind:change="bindRoleChange" />
+      </van-cell-group>
+      <van-button form-type="{{canSubmit ? 'submit' : ''}}" type="primary" round block disabled="{{!canSubmit}}">授权</van-button>
+    </form>
+  </view>
+</view>

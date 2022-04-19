@@ -1,0 +1,48 @@
+<view class="container">
+  <view class="userinfo">
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" type="primary">授权获取个人信息</button>
+    <block wx:else>
+      <image class="userinfo-avatar" bindtap="bindViewTap" src="{{userInfo.avatarUrl}}" mode="cover" />
+      <text class="userinfo-nickname">{{sessionInfo.phone || userInfo.nickName}}</text>
+    </block>
+  </view>
+  <view wx:if="{{hasUserInfo && !sessionInfo.authorized}}">
+    <van-divider contentPosition="center" customStyle="color: #3A88FF; border-color: #3A88FF; font-size: 12px;">
+      个人信息
+    </van-divider>
+    <view>
+      <form bindsubmit="formSubmit" bindreset="formReset">
+        <van-cell-group>
+          <van-field label="姓名" value="{{ wechatUser.name }}" placeholder="请输入姓名" bind:change="bindNameChange" />
+        </van-cell-group>
+        <van-cell-group>
+          <van-field label="角色" value="{{ wechatUser.role }}" placeholder="请选择角色" bind:change="bindRoleChange" />
+        </van-cell-group>
+        <van-cell-group>
+          <van-field value="{{ wechatUser.phone }}" label="手机号" placeholder="请输入手机号" bind:change="bindPhoneChange" use-button-slot>
+            <van-button slot="button" size="small" type="primary" open-type="getPhoneNumber" bindgetphonenumber="bindGetPhoneNumber">
+              获取
+            </van-button>
+          </van-field>
+        </van-cell-group>
+        <van-cell-group>
+          <van-field value="{{ checkCode }}" center clearable label="验证码" placeholder="请输入短信验证码" bind:change="bindCheckCodeChange" use-button-slot>
+            <van-button slot="button" size="small" type="primary" disabled="{{!canSendCode}}" bindtap="bindSendCodeTap">{{btnSendDisplay}}</van-button>
+          </van-field>
+        </van-cell-group>
+        <van-button form-type="{{canSubmit ? 'submit' : ''}}" type="primary" round block disabled="{{!canSubmit}}">授权</van-button>
+      </form>
+    </view>
+  </view>
+  <view class="card" wx:if="{{hasUserInfo && sessionInfo.authorized}}">
+    <van-grid column-num="4" border="{{ false }}">
+      <van-grid-item icon="location-o" icon-color="#3A88FF" text="地址" badge="0" url="/pages/profile/delivery-address/index" />
+      <van-grid-item icon="logistics" icon-color="#3A88FF" text="车辆" badge="99+" />
+      <van-grid-item icon="info-o" icon-color="#3A88FF" text="消息" badge="99+" />
+      <van-grid-item icon="records" icon-color="#3A88FF" text="账单" />
+    </van-grid>
+  </view>
+  <view class="card">
+
+  </view>
+</view>

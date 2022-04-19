@@ -1,0 +1,27 @@
+<!--index.wxml-->
+<swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" circular="true">
+  <block wx:for="{{imgUrls}}" wx:key="index">
+    <swiper-item>
+      <image style="width: 100%;" src="{{item}}" class="slide-image" mode="scaleToFill" />
+    </swiper-item>
+  </block>
+</swiper>
+<view class="container">
+  <view class="card" wx:if="{{hasUserInfo && authorized}}">
+    <van-row gutter="12">
+      <van-col span="12">
+        <van-image width="100%" height="360rpx" src="/images/deliver.png" bindtap="bindDeliverGoodsTap" />
+      </van-col>
+      <van-col span="12">
+        <van-image width="100%" height="360rpx" src="/images/collect.png" bindtap="bindCollectGoodsTap" />
+      </van-col>
+    </van-row>
+    <van-divider contentPosition="center" customStyle="color: #3A88FF; border-color: #3A88FF; font-size: 12px;">
+      待运信息
+    </van-divider>
+    <van-empty description="暂时没有" />
+  </view>
+  <view wx:if="{{!authorized}}">
+    <button class="weui-btn" type="primary" bindtap="bindAuthorizeTap">前往授权</button>
+  </view>
+</view>

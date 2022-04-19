@@ -1,0 +1,11 @@
+<!--pages/booking/booking.wxml-->
+<view class="container">
+  <view class="card">
+    <van-cell-group>
+      <van-field label="查询日期" required value="{{queryDate}}" use-button-slot readonly bindtap='bindPickerDateTap'>
+        <van-icon slot="button" name="search" />
+      </van-field>
+    </van-cell-group>
+  </view>
+  <van-calendar show="{{show}}" first-day-of-week="{{ 1 }}" min-date="{{ minDate }}" max-date="{{ maxDate }}" bind:close="onCalendarClose" bind:confirm="onCalendarConfirm" />
+</view>

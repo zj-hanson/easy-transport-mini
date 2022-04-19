@@ -1,0 +1,6 @@
+<!--pages/camera/index.wxml-->
+<van-card wx:for="{{fileList}}" wx:key="index" wx:for-item="item" desc="描述信息" title="商品标题" thumb="{{ item.url }}" />
+<view style="position: fixed;bottom: 30px;right: 30px; z-index: 90;">
+  <van-button type="info" icon='plus' round bind:click="goTakePhoto">
+  </van-button>
+</view>
