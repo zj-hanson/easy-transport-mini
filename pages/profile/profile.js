@@ -19,7 +19,11 @@ Page({
     checkCode: '',
     canSendCode: true,
     canSubmit: false,
-    sessionInfo: null
+    sessionInfo: null,
+    addressList: [],
+    addressCount: 0,
+    vehicleList: [],
+    vehicleCount: 0,
   },
 
   /**
@@ -37,6 +41,8 @@ Page({
         sessionInfo: app.globalData.sessionInfo
       });
     }
+    this.handleRetrieveDeliveryAddress();
+    this.handleRetrieveVehicleInfo();
   },
 
   /**
@@ -71,7 +77,8 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
+    console.log("onPullDownRefresh");
+    this.handleRetrieveDeliveryAddress();
   },
 
   /**
@@ -97,24 +104,28 @@ Page({
       hasUserInfo: true,
     });
   },
+
   bindNameChange(e) {
     let name = 'wechatUser.name';
     this.setData({
       [name]: e.detail
     })
   },
+
   bindRoleChange(e) {
     let role = 'wechatUser.role';
     this.setData({
       [role]: e.detail
     })
   },
+
   bindPhoneChange(e) {
     let phone = 'wechatUser.phone';
     this.setData({
       [phone]: e.detail
     })
   },
+
   bindGetPhoneNumber(e) {
     console.log(e.detail);
     if (e.detail.errMsg === 'getPhoneNumber:ok') {
@@ -149,11 +160,13 @@ Page({
       })
     }
   },
+
   bindCheckCodeChange(e) {
     this.setData({
       checkCode: e.detail
     })
   },
+
   bindSendCodeTap(e) {
     let canSend = true
     let errmsg = ''
@@ -184,7 +197,7 @@ Page({
       }, 60000)
       // 获取校验码
       wx.request({
-        url: app.globalData.baseUrl + '/check-code',
+        url: app.globalData.baseUrl + '/wx52aa1883409dd7de/check-code',
         data: {
           openId: app.globalData.sessionInfo.openId,
           sessionId: app.globalData.sessionInfo.sessionId,
@@ -220,6 +233,7 @@ Page({
       })
     }
   },
+
   formSubmit(e) {
     let canSend = true
     let errmsg = ''
@@ -237,7 +251,7 @@ Page({
       errmsg += '验证码错误\r\n'
     }
     if (canSend) {
-      let url = app.globalData.baseUrl + '/wechat-user';
+      let url = app.globalData.baseUrl + '/wx52aa1883409dd7de/wechat-user';
       wx.request({
         url: url,
         data: {
@@ -267,14 +281,7 @@ Page({
           wx.showModal({
             title: '系统消息',
             content: res.data.msg,
-            showCancel: false,
-            success(res) {
-              if (app.globalData.sessionInfo.authorized) {
-                wx.reLaunch({
-                  url: '/pages/index/index'
-                })
-              }
-            }
+            showCancel: false
           })
         },
         fail: fail => {
@@ -293,7 +300,242 @@ Page({
       })
     }
   },
+
   formReset() {
     // console.log('form发生了reset事件');
-  }
+  },
+
+  handleRetrieveDeliveryAddress: function () {
+    wx.request({
+      url: app.globalData.baseUrl + '/delivery-address/mini-program',
+      data: {
+        session: app.globalData.sessionInfo.sessionId
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      method: 'GET',
+      success: res => {
+        // console.log(res);
+        if (res.statusCode == 200) {
+          this.setData({
+            addressList: res.data.data,
+            addressCount: res.data.count,
+          });
+        }
+      },
+      fail: fail => {
+        console.log(fail)
+      }
+    })
+  },
+
+  handleRemoveDeliveryAddress: function (uid) {
+    let _this = this;
+    let url = app.globalData.baseUrl + '/delivery-address/mini-program/' + uid + '?session=' +
+      app.globalData.sessionInfo.sessionId;
+    wx.request({
+      url: url,
+      data: {
+
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      method: 'DELETE',
+      success: res => {
+        // console.log(res)
+        if (res.statusCode == 200) {
+          wx.showModal({
+            title: '系统消息',
+            content: res.data.msg,
+            showCancel: false,
+            success(res) {
+              _this.handleRetrieveDeliveryAddress();
+            }
+          })
+        }
+      },
+      fail: fail => {
+        wx.showModal({
+          title: '系统提示',
+          content: fail.errMsg,
+          showCancel: false
+        })
+      }
+    })
+  },
+
+  handleRetrieveVehicleInfo: function () {
+    wx.request({
+      url: app.globalData.baseUrl + '/vehicle-info/mini-program',
+      data: {
+        session: app.globalData.sessionInfo.sessionId
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      method: 'GET',
+      success: res => {
+        // console.log(res);
+        if (res.statusCode == 200) {
+          this.setData({
+            vehicleList: res.data.data,
+            vehicleCount: res.data.count,
+          });
+        }
+      },
+      fail: fail => {
+        console.log(fail)
+      }
+    })
+  },
+
+  handleRemoveVehicleInfo: function (uid) {
+    let _this = this;
+    let url = app.globalData.baseUrl + '/vehicle-info/mini-program/' + uid + '?session=' +
+      app.globalData.sessionInfo.sessionId;
+    wx.request({
+      url: url,
+      data: {
+
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      method: 'DELETE',
+      success: res => {
+        // console.log(res)
+        if (res.statusCode == 200) {
+          wx.showModal({
+            title: '系统消息',
+            content: res.data.msg,
+            showCancel: false,
+            success(res) {
+              _this.handleRetrieveVehicleInfo();
+            }
+          })
+        }
+      },
+      fail: fail => {
+        wx.showModal({
+          title: '系统提示',
+          content: fail.errMsg,
+          showCancel: false
+        })
+      }
+    })
+  },
+
+  navigateToDeliveryAddress(e) {
+    let _this = this;
+    wx.navigateTo({
+      url: './delivery-address/index',
+      events: {
+        returnDeliveryAddress: function (res) {
+          _this.handleRetrieveDeliveryAddress();
+        }
+      },
+      success(res) {
+
+      }
+    })
+  },
+
+  navigateToVehicleInfo(e) {
+    let _this = this;
+    wx.navigateTo({
+      url: './vehicle-info/index',
+      events: {
+        returnVehicleInfo: function (res) {
+          _this.handleRetrieveVehicleInfo();
+        }
+      },
+      success(res) {
+
+      }
+    })
+  },
+
+  bindEditDeliveryAddress(e) {
+    let _this = this;
+    let index = e.currentTarget.dataset.index
+    wx.navigateTo({
+      url: './delivery-address/index',
+      events: {
+        returnDeliveryAddress: function (res) {
+          _this.handleRetrieveDeliveryAddress();
+        }
+      },
+      success(res) {
+        let currentObject = _this.data.addressList[index]
+        res.eventChannel.emit('editDeliveryAddress', {
+          data: {
+            ...currentObject,
+          },
+          state: 'edit'
+        })
+      }
+    })
+  },
+
+  bindRemoveDeliveryAddress(e) {
+    // console.log(e);
+    let _this = this;
+    let index = e.currentTarget.dataset.index;
+    let currentObject = this.data.addressList[index];
+    if (currentObject) {
+      wx.showModal({
+        title: '系统提示',
+        content: "是否删除",
+        success(res) {
+          if (res.confirm) {
+            _this.handleRemoveDeliveryAddress(currentObject.uid);
+          }
+        }
+      })
+    }
+  },
+
+  bindEditVehicleInfo(e) {
+    let _this = this;
+    let index = e.currentTarget.dataset.index
+    wx.navigateTo({
+      url: './vehicle-info/index',
+      events: {
+        returnVehicleInfo: function (res) {
+          _this.handleRetrieveVehicleInfo();
+        }
+      },
+      success(res) {
+        let currentObject = _this.data.vehicleList[index]
+        res.eventChannel.emit('editVehicleInfo', {
+          data: {
+            ...currentObject,
+          },
+          state: 'edit'
+        })
+      }
+    })
+  },
+
+  bindRemoveVehicleInfo(e) {
+    // console.log(e);
+    let _this = this;
+    let index = e.currentTarget.dataset.index;
+    let currentObject = this.data.vehicleList[index];
+    if (currentObject) {
+      wx.showModal({
+        title: '系统提示',
+        content: "是否删除",
+        success(res) {
+          if (res.confirm) {
+            _this.handleRemoveVehicleInfo(currentObject.uid);
+          }
+        }
+      })
+    }
+  },
+
+
 })

@@ -8,7 +8,7 @@ App({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         wx.request({
-          url: this.globalData.baseUrl + '/session',
+          url: this.globalData.baseUrl + '/wx52aa1883409dd7de/session',
           data: {
             code: res.code
           },
@@ -17,7 +17,7 @@ App({
           },
           method: 'GET',
           success: res => {
-            // console.log(res.data.object);
+            console.log(res.data.object);
             this.globalData.sessionInfo = res.data.object;
             this.globalData.hasOpenId = true;
             // 执行回调
@@ -67,7 +67,7 @@ App({
       name: null,
       phone: null
     },
-    // baseUrl: 'http://localhost:8083/easy-booking/api/wx52aa1883409dd7de',
-    baseUrl: 'https://ssl.shgxxx.cn/easy-booking/api/wx52aa1883409dd7de'
+    // baseUrl: 'http://localhost:8083/easy-transport/api',
+    baseUrl: 'https://ssl.shgxxx.cn/easy-transport/api'
   }
 })

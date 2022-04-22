@@ -49,7 +49,7 @@
   "compileType": "miniprogram",
   "libVersion": "2.23.4",
   "appid": "wx52aa1883409dd7de",
-  "projectname": "miniprogram-booking",
+  "projectname": "miniprogram-easy-transport",
   "debugOptions": {
     "hidedInDevtools": []
   },

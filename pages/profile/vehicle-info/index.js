@@ -1,4 +1,4 @@
-// pages/profile/address/index.js
+// pages/profile/vehicle/index.js
 var app = getApp();
 
 let eventChannel;
@@ -10,15 +10,35 @@ Page({
    */
   data: {
     submit: true,
+    error: false,
     state: "add",
-    deliveryAddress: {
+    vehicle: {
       openId: null,
-      contactPerson: null,
-      phone: null,
-      company: null,
-      simpleName: null,
-      address: null,
-    }
+      category: null,
+      plateNumber: null,
+      brand: null,
+      model: null,
+      maximumLoad: 0,
+      dimension: null,
+      limitedLength: 0,
+      limitedWidth: 0,
+      limitedHeight: 0,
+      owner: null,
+    },
+    vechicleCategoryShow: false,
+    vechicleCategoryOption: [{
+        name: '普通货车',
+        value: "普通货车"
+      },
+      {
+        name: '平板货车',
+        value: "平板货车"
+      },
+      {
+        name: '集装箱车',
+        value: "集装箱车"
+      },
+    ],
   },
 
   /**
@@ -26,14 +46,14 @@ Page({
    */
   onLoad: function (options) {
     eventChannel = this.getOpenerEventChannel();
-    eventChannel.on('editDeliveryAddress', (res) => {
+    eventChannel.on('editVehicleInfo', (res) => {
       // console.log(res);
       this.setData({
         state: res.state
       })
       if (res.state == "edit") {
         this.setData({
-          deliveryAddress: res.data
+          vehicle: res.data
         })
       }
     })
@@ -88,38 +108,93 @@ Page({
 
   },
 
-  bindContactPersonChange(e) {
-    let contactPerson = 'deliveryAddress.contactPerson';
+  bindCategoryTap(e) {
     this.setData({
-      [contactPerson]: e.detail
+      vechicleCategoryShow: true,
     })
   },
 
-  bindPhoneChange(e) {
-    let phone = 'deliveryAddress.phone';
+  bindCategoryChange(e) {
+    let prop = 'vehicle.category';
     this.setData({
-      [phone]: e.detail
+      [prop]: e.detail
     })
   },
 
-  bindCompanyChange(e) {
-    let company = 'deliveryAddress.company';
+  onVechicleCategoryClose() {
     this.setData({
-      [company]: e.detail
+      vechicleCategoryShow: false
     })
   },
 
-  bindSimpleNameChange(e) {
-    let simpleName = 'deliveryAddress.simpleName';
+  onVechicleCategorySelect(e) {
+    // console.log(e);
+    let prop = 'vehicle.category';
     this.setData({
-      [simpleName]: e.detail
+      [prop]: e.detail.value
     })
   },
 
-  bindAddressChange(e) {
-    let address = 'deliveryAddress.address';
+  bindPlateNumberChange(e) {
+    let prop = 'vehicle.plateNumber';
     this.setData({
-      [address]: e.detail
+      [prop]: e.detail
+    })
+  },
+
+  bindMaximumLoadChange(e) {
+    let prop = 'vehicle.maximumLoad';
+    this.setData({
+      [prop]: e.detail
+    })
+  },
+
+  bindLimitedLengthChange(e) {
+    let prop = 'vehicle.limitedLength';
+    this.setData({
+      [prop]: e.detail
+    })
+  },
+
+  bindLimitedWidthChange(e) {
+    let prop = 'vehicle.limitedWidth';
+    this.setData({
+      [prop]: e.detail
+    })
+  },
+
+  bindLimitedHeightChange(e) {
+    let prop = 'vehicle.limitedHeight';
+    this.setData({
+      [prop]: e.detail
+    })
+  },
+
+  bindBrandChange(e) {
+    let prop = 'vehicle.brand';
+    this.setData({
+      [prop]: e.detail
+    })
+  },
+
+  bindModelChange(e) {
+    let prop = 'vehicle.model';
+    this.setData({
+      [prop]: e.detail
+    })
+  },
+
+  bindDimensionChange(e) {
+    let prop = 'vehicle.dimension';
+    this.setData({
+      [prop]: e.detail
+    })
+  },
+
+  bindOwnerChange(e) {
+    let prop = 'vehicle.owner';
+    this.setData({
+      [prop]: e.detail
     })
   },
 
@@ -127,19 +202,35 @@ Page({
     let canSubmit = true
     let errmsg = ''
     if (!app.globalData.sessionInfo.sessionId) {
-      canSubmit = false;
+      canSend = false;
       errmsg += 'SessionInfo错误\r\n'
+    }
+    if (!this.data.vehicle.category || this.data.vehicle.category == '') {
+      canSubmit = false;
+      errmsg += '车型错误\r\n'
+    }
+    if (!this.data.vehicle.plateNumber || this.data.vehicle.plateNumber == '') {
+      canSubmit = false;
+      errmsg += '车牌号错误\r\n'
+    }
+    if (!this.data.vehicle.maximumLoad || this.data.vehicle.maximumLoad == 0) {
+      canSubmit = false;
+      errmsg += '载重错误\r\n'
+    }
+    if (!this.data.vehicle.dimension || this.data.vehicle.dimension == "") {
+      canSubmit = false;
+      errmsg += '车辆尺寸错误\r\n'
     }
     if (canSubmit) {
       if (this.data.state == "add") {
-        let openId = 'deliveryAddress.openId';
+        let openId = 'vehicle.openId';
         this.setData({
           [openId]: app.globalData.sessionInfo.openId,
         })
-        this.handleAdd(this.data.deliveryAddress);
+        this.handleAdd(this.data.vehicle);
       }
       if (this.data.state == "edit") {
-        this.handleUpdate(this.data.deliveryAddress);
+        this.handleUpdate(this.data.vehicle);
       }
     } else {
       wx.showModal({
@@ -148,14 +239,19 @@ Page({
         showCancel: false
       })
     }
+    this.setData({
+      error: !canSubmit
+    })
   },
 
   formReset() {
     // console.log('form发生了reset事件');
   },
 
+
   handleAdd: function (fields) {
-    let url = app.globalData.baseUrl + '/delivery-address/mini-program?session=' +
+    console.log(fields);
+    let url = app.globalData.baseUrl + '/vehicle-info/mini-program?session=' +
       app.globalData.sessionInfo.sessionId;
     wx.request({
       url: url,
@@ -175,7 +271,7 @@ Page({
             });
           }
           eventChannel = this.getOpenerEventChannel();
-          eventChannel.emit('returnDeliveryAddress', {
+          eventChannel.emit('returnVehicleInfo', {
             data: res.data.object,
             state: this.data.state
           })
@@ -202,7 +298,7 @@ Page({
   },
 
   handleUpdate: function (fields) {
-    let url = app.globalData.baseUrl + '/delivery-address/mini-program/' + fields.uid + '?session=' +
+    let url = app.globalData.baseUrl + '/vehicle-info/mini-program/' + fields.uid + '?session=' +
       app.globalData.sessionInfo.sessionId;
     wx.request({
       url: url,
@@ -214,10 +310,10 @@ Page({
       },
       method: 'PUT',
       success: res => {
-        // console.log(res)
+        console.log(res)
         if (res.statusCode == 200) {
           eventChannel = this.getOpenerEventChannel();
-          eventChannel.emit('returnDeliveryAddress', {
+          eventChannel.emit('returnVehicleInfo', {
             state: this.data.state
           });
           wx.showModal({
@@ -241,6 +337,5 @@ Page({
       }
     })
   }
-
 
 })

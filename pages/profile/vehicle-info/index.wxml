@@ -1,0 +1,47 @@
+<!--pages/profile/vehicle/index.wxml-->
+<view class="container">
+  <view>
+    <van-cell title="维护车辆信息" />
+  </view>
+  <view class="card">
+    <form bindsubmit="formSubmit" bindreset="formReset">
+      <van-field label="选择车型" value="{{ vehicle.category }}" placeholder="请输入车型" required
+      error="{{error}}" bind:click-input="bindCategoryTap" 
+      bind:click-icon="bindCategoryTap"
+      bind:change="bindCategoryChange" icon="more-o">
+      </van-field>
+      <van-field value="{{ vehicle.plateNumber }}" label="车牌号" placeholder="请输入车牌号" required 
+      error="{{error}}" bind:change="bindPlateNumberChange" />
+      <van-field label="载重" value="{{ vehicle.maximumLoad }}" placeholder="数字" type="number" required 
+      error="{{error}}" bind:change="bindMaximumLoadChange" use-button-slot>
+        <van-button slot="button" size="small" round disabled>
+          吨
+        </van-button>
+      </van-field>
+      <van-field label="限长" value="{{ vehicle.limitedLength }}" placeholder="数字" type="number" required bind:change="bindLimitedLengthChange" use-button-slot>
+        <van-button slot="button" size="small" round disabled>
+          米
+        </van-button>
+      </van-field>
+      <van-field label="限宽" value="{{ vehicle.limitedWidth }}" placeholder="数字" type="number" required bind:change="bindLimitedWidthChange" use-button-slot>
+        <van-button slot="button" size="small" round disabled>
+          米
+        </van-button>
+      </van-field>
+      <van-field label="限高" value="{{ vehicle.limitedHeight }}" placeholder="数字" type="number" required bind:change="bindLimitedHeightChange" use-button-slot>
+        <van-button slot="button" size="small" round disabled>
+          米
+        </van-button>
+      </van-field>
+      <van-field label="品牌" value="{{ vehicle.brand }}" placeholder="比如中国重汽、一汽解放" bind:change="bindBrandChange" />
+      <van-field label="型号" value="{{ vehicle.model }}" placeholder="比如斯太尔M5G、解放J6M" bind:change="bindModelChange" />
+      <van-field label="车辆尺寸" type="textarea" value="{{ vehicle.dimension }}" placeholder="请输入车辆长宽高（米）" required error="{{error}}" clearable="{{true}}" autosize custom-style="height:60px" 
+      bind:change="bindDimensionChange"/>
+      <van-field label="车辆所属" type="textarea" value="{{ vehicle.owner }}" placeholder="请输入车辆所有者" clearable="{{true}}" autosize custom-style="height:60px" bind:change="bindOwnerChange" />
+      <van-cell-group>
+        <van-button form-type="{{submit ? 'submit' : ''}}" type="primary" round block>保存</van-button>
+      </van-cell-group>
+    </form>
+    <van-action-sheet show="{{ vechicleCategoryShow }}" actions="{{ vechicleCategoryOption }}" bind:close="onVechicleCategoryClose" bind:select="onVechicleCategorySelect" />
+  </view>
+</view>

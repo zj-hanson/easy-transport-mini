@@ -1,6 +1,7 @@
 {
   "usingComponents": {
     "van-field": "@vant/weapp/field/index",
+    "van-action-sheet": "@vant/weapp/action-sheet/index",
     "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
     "van-dropdown-item": "@vant/weapp/dropdown-item/index",
     "van-button": "@vant/weapp/button/index",
@@ -40,6 +41,7 @@
     "pages/booking/booking",
     "pages/profile/profile",
     "pages/profile/delivery-address/index",
+    "pages/profile/vehicle-info/index",
     "pages/collect-goods/collect-goods",
     "pages/deliver-goods/deliver-goods"
   ],
