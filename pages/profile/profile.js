@@ -336,9 +336,6 @@ Page({
       app.globalData.sessionInfo.sessionId;
     wx.request({
       url: url,
-      data: {
-
-      },
       header: {
         'content-type': 'application/json'
       },
@@ -397,9 +394,6 @@ Page({
       app.globalData.sessionInfo.sessionId;
     wx.request({
       url: url,
-      data: {
-
-      },
       header: {
         'content-type': 'application/json'
       },
@@ -487,7 +481,7 @@ Page({
     if (currentObject) {
       wx.showModal({
         title: '系统提示',
-        content: "是否删除",
+        content: "是否删除" + currentObject.simpleName,
         success(res) {
           if (res.confirm) {
             _this.handleRemoveDeliveryAddress(currentObject.uid);
@@ -527,7 +521,7 @@ Page({
     if (currentObject) {
       wx.showModal({
         title: '系统提示',
-        content: "是否删除",
+        content: "是否删除" + currentObject.plateNumber,
         success(res) {
           if (res.confirm) {
             _this.handleRemoveVehicleInfo(currentObject.uid);
