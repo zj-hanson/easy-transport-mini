@@ -1,0 +1,40 @@
+<!--pages/deliver-goods/index.wxml-->
+<view class="container">
+  <view>
+    <van-cell title="预约送货时间" />
+  </view>
+  <view class="card">
+    <form bindsubmit="formSubmit" bindreset="formReset">
+      <van-field label="选择车牌" value="{{ transportInfo.plateNumber }}" placeholder="请输入车牌号" required readonly error="{{error}}" bind:change="bindPlateNumberChange" bindtap="bindPlateNumberTap" use-button-slot>
+        <van-icon slot="button" name="search" bindtap="bindConsigneeCompanyTap" />
+      </van-field>
+      <van-field label="货物说明" type="textarea" value="{{ transportInfo.content }}" placeholder="请输入运输什么货物" clearable="{{true}}" autosize custom-style="height:100px" required required required bind:change="bindContentChange" />
+      <van-field label="收货公司" value="{{transportInfo.consigneeCompany}}" required readonly bindtap="bindConsigneeCompanyTap" use-button-slot>
+        <van-icon slot="button" name="search" bindtap="bindConsigneeCompanyTap" />
+      </van-field>
+      <van-field label="收货地址" value="{{transportInfo.consigneeAddress}}" type="textarea" required autosize custom-style="height:80px" />
+      <van-field label="送货日期" required value="{{plannedDate}}" id='plannedDate' use-button-slot readonly bindtap='bindPlannedDateTap'>
+        <van-icon slot="button" name="arrow" bindtap='bindPlannedDateTap' />
+      </van-field>
+      <van-field label="送货时间" required value="{{plannedTime}}" id='plannedTime' use-button-slot readonly bindtap='bindPlannedTimeTap'>
+        <van-icon slot="button" name="arrow" bindtap="bindPlannedTimeTap" />
+      </van-field>
+      <van-field label="发货公司" value="{{transportInfo.consignorCompany}}" readonly bindtap="bindConsignorCompanyTap" use-button-slot>
+        <van-icon slot="button" name="search" bindtap="bindConsignorCompanyTap" />
+      </van-field>
+      <van-field label="发货地址" value="{{transportInfo.consignorAddress}}" type="textarea" autosize custom-style="height:80px" />
+      <van-cell-group>
+        <van-button form-type="{{submit ? 'submit' : ''}}" type="primary" round block>保存</van-button>
+      </van-cell-group>
+    </form>
+    <van-action-sheet title="选择车牌" show="{{ plateNumberShow }}" actions="{{ vehicleOption }}" bind:close="onPlateNumberClose" bind:select="onPlateNumberSelect" />
+    <van-popup show="{{plannedDateShow}}" position="bottom" bind:close="bindPlannedDateClose">
+      <van-datetime-picker type="date" value="{{selectedPlannedDate}}" min-date="{{ minPlannedDate }}" bind:cancel="bindPlannedDateClose" bind:confirm="bindPlannedDateConfirm" />
+    </van-popup>
+    <van-popup show="{{plannedTimeShow}}" position="bottom" bind:close="bindPlannedTimeClose">
+      <van-datetime-picker type="time" value="{{plannedTime }} " bind:cancel="bindPlannedTimeClose" bind:confirm="bindPlannedTimeConfirm" />
+    </van-popup>
+    <van-action-sheet title="发货公司" show="{{ consignorCompanyShow }}" actions="{{ addressOption }}" bind:close="onConsignorCompanyClose" bind:select="onConsignorCompanySelect" />
+    <van-action-sheet title="收货公司" show="{{ consigneeCompanyShow }}" actions="{{ addressOption }}" bind:close="onConsigneeCompanyClose" bind:select="onConsigneeCompanySelect" />
+  </view>
+</view>

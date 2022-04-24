@@ -24,6 +24,8 @@ App({
             if (this.sessionInfoReadyCallback) {
               this.sessionInfoReadyCallback(res.data.object)
             }
+            this.handleRetrieveDeliveryAddress(res.data.object.sessionId);
+            this.handleRetrieveVehicleInfo(res.data.object.sessionId);
           },
           fail: fail => {
             console.log(fail)
@@ -56,6 +58,53 @@ App({
       }
     })
   },
+
+  handleRetrieveDeliveryAddress(sessionId) {
+    wx.request({
+      url: this.globalData.baseUrl + '/delivery-address/mini-program',
+      data: {
+        session: sessionId
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      method: 'GET',
+      success: res => {
+        // console.log(res);
+        if (res.statusCode == 200) {
+          this.globalData.addressList = res.data.data;
+          this.globalData.addressCount = res.data.count;
+        }
+      },
+      fail: fail => {
+        console.log(fail)
+      }
+    })
+  },
+
+  handleRetrieveVehicleInfo(sessionId) {
+    wx.request({
+      url: this.globalData.baseUrl + '/vehicle-info/mini-program',
+      data: {
+        session: sessionId
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      method: 'GET',
+      success: res => {
+        // console.log(res);
+        if (res.statusCode == 200) {
+          this.globalData.vehicleList = res.data.data;
+          this.globalData.vehicleCount = res.data.count;
+        }
+      },
+      fail: fail => {
+        console.log(fail)
+      }
+    })
+  },
+
   globalData: {
     userInfo: null,
     hasUserInfo: false,
@@ -67,6 +116,10 @@ App({
       name: null,
       phone: null
     },
+    addressList: [],
+    addressCount: 0,
+    vehicleList: [],
+    vehicleCount: 0,
     // baseUrl: 'http://localhost:8083/easy-transport/api',
     baseUrl: 'https://ssl.shgxxx.cn/easy-transport/api'
   }

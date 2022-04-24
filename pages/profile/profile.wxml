@@ -13,25 +13,30 @@
     <view>
       <form bindsubmit="formSubmit" bindreset="formReset">
         <van-cell-group>
-          <van-field label="姓名" value="{{ wechatUser.name }}" placeholder="请输入姓名" bind:change="bindNameChange" />
+          <van-field label="姓名" value="{{ wechatUser.name }}" placeholder="请输入姓名" required bind:change="bindNameChange" />
         </van-cell-group>
         <van-cell-group>
-          <van-field label="角色" value="{{ wechatUser.role }}" placeholder="请选择角色" bind:change="bindRoleChange" />
+          <van-field label="角色" value="{{ wechatUser.role }}" placeholder="请选择角色" required readonly bind:change="bindRoleChange" use-button-slot>
+            <van-button slot="button" size="small" type="primary" round bindtap="bindRoleTap">
+              选择
+            </van-button>
+          </van-field>
         </van-cell-group>
         <van-cell-group>
-          <van-field value="{{ wechatUser.phone }}" label="手机号" placeholder="请输入手机号" bind:change="bindPhoneChange" use-button-slot>
-            <van-button slot="button" size="small" type="primary" open-type="getPhoneNumber" bindgetphonenumber="bindGetPhoneNumber">
+          <van-field value="{{ wechatUser.phone }}" label="手机号" placeholder="请输入手机号" required bind:change="bindPhoneChange" use-button-slot>
+            <van-button slot="button" size="small" type="primary" round open-type="getPhoneNumber" bindgetphonenumber="bindGetPhoneNumber">
               获取
             </van-button>
           </van-field>
         </van-cell-group>
         <van-cell-group>
-          <van-field value="{{ checkCode }}" center clearable label="验证码" placeholder="请输入短信验证码" bind:change="bindCheckCodeChange" use-button-slot>
-            <van-button slot="button" size="small" type="primary" disabled="{{!canSendCode}}" bindtap="bindSendCodeTap">{{btnSendDisplay}}</van-button>
+          <van-field value="{{ checkCode }}" center clearable label="验证码" placeholder="请输入短信验证码" required bind:change="bindCheckCodeChange" use-button-slot>
+            <van-button slot="button" size="small" type="primary" round disabled="{{!canSendCode}}" bindtap="bindSendCodeTap">{{btnSendDisplay}}</van-button>
           </van-field>
         </van-cell-group>
         <van-button form-type="{{canSubmit ? 'submit' : ''}}" type="primary" round block disabled="{{!canSubmit}}">授权</van-button>
       </form>
+      <van-action-sheet show="{{ userRoleShow }}" actions="{{ userRoleOption }}" bind:close="onUserRoleClose" bind:select="onUserRoleSelect" />
     </view>
   </view>
   <view class="card" wx:if="{{sessionInfo.authorized}}">
@@ -51,8 +56,7 @@
     </van-cell-group>
     <van-cell class="card-title" title="车辆信息" />
     <van-cell-group inset wx:for="{{vehicleList}}" wx:for-item="item" wx:key="uid">
-      <van-cell title="{{item.plateNumber}}最大载重{{item.maximumLoad}}T"
-      label="{{item.dimension}}" data-index="{{index}}" capture-bind:longpress="bindRemoveVehicleInfo">
+      <van-cell title="{{item.plateNumber}}最大载重{{item.maximumLoad}}T" label="{{item.dimension}}" data-index="{{index}}" capture-bind:longpress="bindRemoveVehicleInfo">
         <van-icon slot="right-icon" name="edit" data-index="{{index}}" bindtap="bindEditVehicleInfo" />
       </van-cell>
     </van-cell-group>

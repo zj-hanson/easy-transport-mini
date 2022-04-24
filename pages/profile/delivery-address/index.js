@@ -130,6 +130,18 @@ Page({
       canSubmit = false;
       errmsg += 'SessionInfo错误\r\n'
     }
+    if (!this.data.deliveryAddress.company || this.data.deliveryAddress.company == '') {
+      canSubmit = false;
+      errmsg += '公司全称错误\r\n'
+    }
+    if (!this.data.deliveryAddress.simpleName || this.data.deliveryAddress.simpleName == '') {
+      canSubmit = false;
+      errmsg += '公司简称错误\r\n'
+    }
+    if (!this.data.deliveryAddress.address || this.data.deliveryAddress.address == '') {
+      canSubmit = false;
+      errmsg += '详细地址错误\r\n'
+    }
     if (canSubmit) {
       if (this.data.state == "add") {
         let openId = 'deliveryAddress.openId';

@@ -1,4 +1,5 @@
 // pages/profile/profile.js
+
 var app = getApp();
 
 Page({
@@ -7,6 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    userRoleShow: false,
     btnSendDisplay: '获取',
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     userInfo: {},
@@ -16,6 +18,19 @@ Page({
       phone: '',
       role: null
     },
+    userRoleOption: [{
+        name: '司机',
+        value: '司机'
+      },
+      {
+        name: '物流',
+        value: '物流'
+      },
+      {
+        name: '客户',
+        value: '客户'
+      },
+    ],
     checkCode: '',
     canSendCode: true,
     canSubmit: false,
@@ -29,7 +44,7 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function () {
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -43,6 +58,7 @@ Page({
     }
     this.handleRetrieveDeliveryAddress();
     this.handleRetrieveVehicleInfo();
+
   },
 
   /**
@@ -112,10 +128,30 @@ Page({
     })
   },
 
+  bindRoleTap() {
+    this.setData({
+      userRoleShow: true,
+    })
+  },
+
   bindRoleChange(e) {
     let role = 'wechatUser.role';
     this.setData({
       [role]: e.detail
+    })
+  },
+
+  onUserRoleClose() {
+    this.setData({
+      userRoleShow: false
+    })
+  },
+
+  onUserRoleSelect(e) {
+    // console.log(e);
+    let prop = 'wechatUser.role';
+    this.setData({
+      [prop]: e.detail.value
     })
   },
 
@@ -130,7 +166,7 @@ Page({
     console.log(e.detail);
     if (e.detail.errMsg === 'getPhoneNumber:ok') {
       wx.request({
-        url: app.globalData.baseUrl + "/phone-number",
+        url: app.globalData.baseUrl + "/wx52aa1883409dd7de/phone-number",
         data: {
           code: e.detail.code,
           sessionId: app.globalData.sessionInfo.sessionId
@@ -167,7 +203,7 @@ Page({
     })
   },
 
-  bindSendCodeTap(e) {
+  bindSendCodeTap() {
     let canSend = true
     let errmsg = ''
     // let reg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1}))+\d{8})$/
@@ -234,7 +270,7 @@ Page({
     }
   },
 
-  formSubmit(e) {
+  formSubmit() {
     let canSend = true
     let errmsg = ''
     // 更新用户状态
@@ -306,10 +342,13 @@ Page({
   },
 
   handleRetrieveDeliveryAddress: function () {
+    let sessionId = app.globalData.sessionInfo.sessionId;
+    // 更新全局地址数据
+    app.handleRetrieveDeliveryAddress(sessionId);
     wx.request({
       url: app.globalData.baseUrl + '/delivery-address/mini-program',
       data: {
-        session: app.globalData.sessionInfo.sessionId
+        session: sessionId
       },
       header: {
         'content-type': 'application/json'
@@ -347,7 +386,7 @@ Page({
             title: '系统消息',
             content: res.data.msg,
             showCancel: false,
-            success(res) {
+            success() {
               _this.handleRetrieveDeliveryAddress();
             }
           })
@@ -364,10 +403,13 @@ Page({
   },
 
   handleRetrieveVehicleInfo: function () {
+    let sessionId = app.globalData.sessionInfo.sessionId;
+    // 更新全局车辆数据
+    app.handleRetrieveVehicleInfo(sessionId);
     wx.request({
       url: app.globalData.baseUrl + '/vehicle-info/mini-program',
       data: {
-        session: app.globalData.sessionInfo.sessionId
+        session: sessionId
       },
       header: {
         'content-type': 'application/json'
@@ -405,7 +447,7 @@ Page({
             title: '系统消息',
             content: res.data.msg,
             showCancel: false,
-            success(res) {
+            success() {
               _this.handleRetrieveVehicleInfo();
             }
           })
@@ -421,31 +463,31 @@ Page({
     })
   },
 
-  navigateToDeliveryAddress(e) {
+  navigateToDeliveryAddress() {
     let _this = this;
     wx.navigateTo({
       url: './delivery-address/index',
       events: {
-        returnDeliveryAddress: function (res) {
+        returnDeliveryAddress: function () {
           _this.handleRetrieveDeliveryAddress();
         }
       },
-      success(res) {
+      success() {
 
       }
     })
   },
 
-  navigateToVehicleInfo(e) {
+  navigateToVehicleInfo() {
     let _this = this;
     wx.navigateTo({
       url: './vehicle-info/index',
       events: {
-        returnVehicleInfo: function (res) {
+        returnVehicleInfo: function () {
           _this.handleRetrieveVehicleInfo();
         }
       },
-      success(res) {
+      success() {
 
       }
     })
@@ -457,7 +499,7 @@ Page({
     wx.navigateTo({
       url: './delivery-address/index',
       events: {
-        returnDeliveryAddress: function (res) {
+        returnDeliveryAddress: function () {
           _this.handleRetrieveDeliveryAddress();
         }
       },
@@ -497,7 +539,7 @@ Page({
     wx.navigateTo({
       url: './vehicle-info/index',
       events: {
-        returnVehicleInfo: function (res) {
+        returnVehicleInfo: function () {
           _this.handleRetrieveVehicleInfo();
         }
       },

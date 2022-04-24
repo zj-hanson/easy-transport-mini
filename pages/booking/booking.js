@@ -75,13 +75,13 @@ Page({
     })
   },
 
-  onCalendarClose() {
+  onQueryDateCalendarClose() {
     this.setData({
       show: false,
     })
   },
 
-  onCalendarConfirm(event) {
+  onQueryDateCalendarConfirm(event) {
     this.setData({
       show: false,
       queryDate: moment(event.detail).format("YYYY-MM-DD"),

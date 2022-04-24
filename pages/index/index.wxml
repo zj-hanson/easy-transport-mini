@@ -10,18 +10,37 @@
   <view class="card" wx:if="{{hasUserInfo && authorized}}">
     <van-row gutter="12">
       <van-col span="12">
-        <van-image width="100%" height="360rpx" src="/images/deliver.png" bindtap="bindDeliverGoodsTap" />
+        <van-image width="100%" height="360rpx" src="/images/deliver.png" bindtap="navigateToDeliverGoods" />
       </van-col>
       <van-col span="12">
-        <van-image width="100%" height="360rpx" src="/images/collect.png" bindtap="bindCollectGoodsTap" />
+        <van-image width="100%" height="360rpx" src="/images/collect.png" bindtap="navigateToCollectGoods" />
       </van-col>
     </van-row>
-    <van-divider contentPosition="center" customStyle="color: #3A88FF; border-color: #3A88FF; font-size: 12px;">
-      待运信息
-    </van-divider>
-    <van-empty description="暂时没有" />
+    <van-tabs active="{{activeTab}}">
+      <van-tab title="已预约" name="status-b">
+        <block wx:if="{{transportInfoList.length > 0}}">
+          <van-cell-group inset class="card-title" wx:for="{{transportInfoList}}" wx:for-item="item" wx:key="uid">
+            <van-cell title="{{item.plateNumber}}" data-id="{{item.uid}}" size="large" border="{{ false }}" capture-bind:longpress="bindRemoveTransportInfo">
+              <van-icon slot="right-icon" name="edit" data-index="{{index}}" bindtap="" />
+            </van-cell>
+            <van-cell title="【发货】{{item.consignorCompany}}" label="{{item.consignorAddress}}" border="{{ false }}" wx:if="{{item.consignorCompany}}" />
+            <van-cell title="【约{{item.kind}}】{{item.plannedArrivalDate}}:{{item.plannedArrivalTime}}" data-index="{{index}}" capture-bind:longpress="" wx:for="{{item.timeList}}" wx:key="uid" border="{{ false }}">
+              <van-icon slot="right-icon" name="edit" data-id="{{item.uid}}" bindtap="bindEditTransportTime" />
+            </van-cell>
+            <van-cell title="【收货】{{item.consigneeCompany}}" label="{{item.consigneeAddress}}" border="{{ false }}" wx:if="{{item.consigneeCompany}}" />
+          </van-cell-group>
+        </block>
+        <van-empty description="暂时没有" wx:else />
+      </van-tab>
+      <van-tab title="待安排" name="status-n">
+        <van-empty description="暂时没有" />
+      </van-tab>
+      <van-tab title="已完成" name="status-v">
+        <van-empty description="暂时没有" />
+      </van-tab>
+    </van-tabs>
   </view>
   <view wx:if="{{!authorized}}">
-    <button class="weui-btn" type="primary" bindtap="bindAuthorizeTap">前往授权</button>
+    <button class="weui-btn" type="primary" bindtap="navigateToAuthorize">前往授权</button>
   </view>
 </view>

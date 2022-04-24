@@ -199,8 +199,8 @@ Page({
   },
 
   formSubmit(e) {
-    let canSubmit = true
-    let errmsg = ''
+    let canSubmit = true;
+    let errmsg = '';
     if (!app.globalData.sessionInfo.sessionId) {
       canSend = false;
       errmsg += 'SessionInfo错误\r\n'

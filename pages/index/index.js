@@ -13,23 +13,20 @@ Page({
       'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
     ],
     menu: [{
-        id: 'menu01',
-        name: '发票',
-        imgUrl: '../../images/task.png',
-        url: '/pages/profile/profile'
-      },
-      {
-        id: 'menu02',
-        name: '报价',
-        imgUrl: '../../images/task.png',
-        url: '/pages/profile/profile'
-      }
-    ],
+      id: 'menu01',
+      name: '发票',
+      imgUrl: '../../images/task.png',
+      url: '/pages/profile/profile'
+    }, ],
     indicatorDots: false,
     autoplay: true,
     interval: 5000,
-    duration: 1000
+    duration: 1000,
+    transportInfoList: [],
+    transportTimeList: [],
+    activeTab: 'status-b',
   },
+
   onLoad: function () {
     if (app.globalData.userInfo) {
       this.setData({
@@ -47,6 +44,7 @@ Page({
         this.setData({
           authorized: sessionInfo.authorized
         })
+        this.handleRetrieveTransportInfo(sessionInfo.sessionId, "B");
       }
     } else {
       // 在没有 open-type=getUserInfo 版本的兼容处理
@@ -62,21 +60,125 @@ Page({
       this.setData({
         authorized: app.globalData.sessionInfo.authorized
       })
+      if (app.globalData.sessionInfo.sessionId) {
+        this.handleRetrieveTransportInfo(app.globalData.sessionInfo.sessionId, "B");
+      }
     }
   },
-  bindAuthorizeTap(e) {
+
+  onPullDownRefresh: function () {
+    // console.log("onPullDownRefresh");
+    this.handleRetrieveTransportInfo(app.globalData.sessionInfo.sessionId, "B");
+  },
+
+  navigateToAuthorize(e) {
     wx.switchTab({
       url: '/pages/profile/profile'
     })
   },
-  bindCollectGoodsTap(){
-    wx.redirectTo({
-      url: '/pages/collect-goods/collect-goods'
+
+  navigateToCollectGoods() {
+    let _this = this;
+    wx.navigateTo({
+      url: '/pages/collect-goods/index',
+      events: {
+        returnCollectGoods: function () {
+          _this.handleRetrieveTransportInfo(app.globalData.sessionInfo.sessionId, "B");
+        }
+      },
     })
   },
-  bindDeliverGoodsTap(){
-    wx.redirectTo({
-      url: '/pages/collect-goods/collect-goods'
+
+  navigateToDeliverGoods() {
+    let _this = this;
+    wx.navigateTo({
+      url: '/pages/deliver-goods/index',
+      events: {
+        returnDeliverGoods: function () {
+          _this.handleRetrieveTransportInfo(app.globalData.sessionInfo.sessionId, "B");
+        }
+      },
     })
-  }
+  },
+
+  bindRemoveTransportInfo(e) {
+    // console.log(e);
+    let _this = this;
+    let uid = e.currentTarget.dataset.id;
+    if (uid) {
+      wx.showModal({
+        title: '系统提示',
+        content: "是否删除",
+        success(res) {
+          if (res.confirm) {
+            _this.handleRemoveTransportInfo(uid);
+          }
+        }
+      })
+    }
+  },
+
+  bindEditTransportTime(e) {
+    console.log(e);
+  },
+
+  handleRetrieveTransportInfo(sessionId, status) {
+    wx.request({
+      url: app.globalData.baseUrl + '/transport-info/mini-program',
+      data: {
+        session: sessionId,
+        status: status
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      method: 'GET',
+      success: res => {
+        console.log(res);
+        if (res.statusCode == 200) {
+          this.setData({
+            transportInfoList: res.data.data,
+          });
+        }
+      },
+      fail: fail => {
+        console.log(fail)
+      }
+    })
+  },
+
+  handleRemoveTransportInfo: function (uid) {
+    let _this = this;
+    let sessionId = app.globalData.sessionInfo.sessionId;
+    let url = app.globalData.baseUrl + '/transport-info/mini-program/' + uid + '?session=' +
+      sessionId;
+    wx.request({
+      url: url,
+      header: {
+        'content-type': 'application/json'
+      },
+      method: 'DELETE',
+      success: res => {
+        // console.log(res)
+        if (res.statusCode == 200) {
+          wx.showModal({
+            title: '系统消息',
+            content: res.data.msg,
+            showCancel: false,
+            success() {
+              _this.handleRetrieveTransportInfo(sessionId, "B");
+            }
+          })
+        }
+      },
+      fail: fail => {
+        wx.showModal({
+          title: '系统提示',
+          content: fail.errMsg,
+          showCancel: false
+        })
+      }
+    })
+  },
+
 })

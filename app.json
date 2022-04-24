@@ -37,13 +37,12 @@
   },
   "pages": [
     "pages/index/index",
-    "pages/camera/camera",
     "pages/booking/booking",
     "pages/profile/profile",
     "pages/profile/delivery-address/index",
     "pages/profile/vehicle-info/index",
-    "pages/collect-goods/collect-goods",
-    "pages/deliver-goods/deliver-goods"
+    "pages/deliver-goods/index",
+    "pages/collect-goods/index"
   ],
   "tabBar": {
     "selectedColor": "#0396FF",
