@@ -301,6 +301,8 @@ Page({
           kind: this.data.transportInfo.kind,
           plateNumber: this.data.transportInfo.plateNumber,
           carrier: phone,
+          customer: this.data.transportInfo.consigneeCompany,
+          address: this.data.transportInfo.consigneeAddress,
           plannedArrivalDate: this.data.plannedDate,
           plannedArrivalTime: this.data.plannedTime,
           status: 'B',

@@ -21,13 +21,14 @@
         <block wx:if="{{transportInfoList.length > 0}}">
           <van-cell-group inset class="card-title" wx:for="{{transportInfoList}}" wx:for-item="item" wx:key="uid">
             <van-cell title="{{item.plateNumber}}" data-id="{{item.uid}}" size="large" border="{{ false }}" capture-bind:longpress="bindRemoveTransportInfo">
-              <van-icon slot="right-icon" name="edit" data-index="{{index}}" bindtap="" />
+              <van-icon slot="right-icon" name="delete-o" data-id="{{item.uid}}" bindtap="bindRemoveTransportInfo" />
             </van-cell>
-            <van-cell title="【发货】{{item.consignorCompany}}" label="{{item.consignorAddress}}" border="{{ false }}" wx:if="{{item.consignorCompany}}" />
-            <van-cell title="【约{{item.kind}}】{{item.plannedArrivalDate}}T{{item.plannedArrivalTime}}" data-index="{{index}}" capture-bind:longpress="" wx:for="{{item.timeList}}" wx:key="uid" border="{{ false }}">
-              <van-icon slot="right-icon" name="edit" data-id="{{item.uid}}" bindtap="bindEditTransportTime" />
+            <van-cell title="【发】{{item.consignorCompany}}" label="{{item.consignorAddress}}" border="{{ false }}" wx:if="{{item.consignorCompany}}" />
+            <van-cell title="【{{item.kind}}】{{item.plannedArrivalDate}}T{{item.plannedArrivalTime}}" data-id="{{item.uid}}" capture-bind:longpress="" wx:for="{{item.timeList}}" wx:key="uid" border="{{ false }}" >
+              <van-icon slot="right-icon" name="edit" data-id="{{item.uid}}" 
+              bindtap="bindEditTransportTime" />
             </van-cell>
-            <van-cell title="【收货】{{item.consigneeCompany}}" label="{{item.consigneeAddress}}" border="{{ false }}" wx:if="{{item.consigneeCompany}}" />
+            <van-cell title="【收】{{item.consigneeCompany}}" label="{{item.consigneeAddress}}" border="{{ false }}" wx:if="{{item.consigneeCompany}}"/>
           </van-cell-group>
         </block>
         <van-empty description="暂时没有" wx:else />

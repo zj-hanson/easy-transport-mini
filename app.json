@@ -42,7 +42,8 @@
     "pages/profile/delivery-address/index",
     "pages/profile/vehicle-info/index",
     "pages/deliver-goods/index",
-    "pages/collect-goods/index"
+    "pages/collect-goods/index",
+    "pages/transport-time/index"
   ],
   "tabBar": {
     "selectedColor": "#0396FF",

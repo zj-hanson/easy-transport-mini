@@ -119,7 +119,24 @@ Page({
   },
 
   bindEditTransportTime(e) {
-    console.log(e);
+    // console.log(e);
+    let _this = this;
+    let uid = e.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: '/pages/transport-time/index',
+      events: {
+        returnTransportTime: function () {
+          _this.handleRetrieveTransportInfo(app.globalData.sessionInfo.sessionId, "B");
+        }
+      },
+      success(res) {
+        res.eventChannel.emit('editTransportTime', {
+          data: {},
+          uid: uid,
+          state: 'edit'
+        })
+      }
+    })
   },
 
   handleRetrieveTransportInfo(sessionId, status) {
@@ -134,7 +151,7 @@ Page({
       },
       method: 'GET',
       success: res => {
-        console.log(res);
+        // console.log(res);
         if (res.statusCode == 200) {
           this.setData({
             transportInfoList: res.data.data,

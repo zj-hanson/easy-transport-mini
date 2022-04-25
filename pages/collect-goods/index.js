@@ -183,7 +183,7 @@ Page({
     });
   },
 
-  bindConsignorAddressChange(e){
+  bindConsignorAddressChange(e) {
     let prop = 'transportInfo.consignorAddress';
     this.setData({
       [prop]: e.detail,
@@ -303,6 +303,8 @@ Page({
           kind: this.data.transportInfo.kind,
           plateNumber: this.data.transportInfo.plateNumber,
           carrier: phone,
+          customer: this.data.transportInfo.consigneeCompany,
+          address: this.data.transportInfo.consigneeAddress,
           plannedArrivalDate: this.data.plannedDate,
           plannedArrivalTime: this.data.plannedTime,
           status: 'B',
