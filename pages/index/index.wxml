@@ -24,7 +24,7 @@
               <van-icon slot="right-icon" name="edit" data-index="{{index}}" bindtap="" />
             </van-cell>
             <van-cell title="【发货】{{item.consignorCompany}}" label="{{item.consignorAddress}}" border="{{ false }}" wx:if="{{item.consignorCompany}}" />
-            <van-cell title="【约{{item.kind}}】{{item.plannedArrivalDate}}:{{item.plannedArrivalTime}}" data-index="{{index}}" capture-bind:longpress="" wx:for="{{item.timeList}}" wx:key="uid" border="{{ false }}">
+            <van-cell title="【约{{item.kind}}】{{item.plannedArrivalDate}}T{{item.plannedArrivalTime}}" data-index="{{index}}" capture-bind:longpress="" wx:for="{{item.timeList}}" wx:key="uid" border="{{ false }}">
               <van-icon slot="right-icon" name="edit" data-id="{{item.uid}}" bindtap="bindEditTransportTime" />
             </van-cell>
             <van-cell title="【收货】{{item.consigneeCompany}}" label="{{item.consigneeAddress}}" border="{{ false }}" wx:if="{{item.consigneeCompany}}" />

@@ -12,7 +12,8 @@
       <van-field label="发货公司" value="{{transportInfo.consignorCompany}}" required readonly bindtap="bindConsignorCompanyTap" use-button-slot>
         <van-icon slot="button" name="search" bindtap="bindConsignorCompanyTap" />
       </van-field>
-      <van-field label="发货地址" value="{{transportInfo.consignorAddress}}" required type="textarea" autosize custom-style="height:80px" />
+      <van-field label="发货地址" value="{{transportInfo.consignorAddress}}" required type="textarea" autosize custom-style="height:80px" 
+      bind:change="bindConsignorAddressChange"/>
       <van-field label="拉货日期" required value="{{plannedDate}}" id='plannedDate' use-button-slot readonly bindtap='bindPlannedDateTap'>
         <van-icon slot="button" name="arrow" bindtap='bindPlannedDateTap' />
       </van-field>

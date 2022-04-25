@@ -78,7 +78,8 @@ Page({
     })
     let addressList = app.globalData.addressList.map(item => {
       return {
-        name: item.simpleName,
+        name: item.company,
+        subname: item.address,
         address: item.address
       }
     })
@@ -168,7 +169,6 @@ Page({
   },
 
   onConsignorCompanySelect(e) {
-    console.log(e);
     let consignorCompany = 'transportInfo.consignorCompany';
     let consignorAddress = 'transportInfo.consignorAddress';
     this.setData({
@@ -179,6 +179,7 @@ Page({
       consignorCompanyShow: false
     });
   },
+
 
   bindPlannedDateTap() {
     this.setData({
@@ -246,11 +247,18 @@ Page({
     });
   },
 
+  bindConsigneeAddressChange(e) {
+    let prop = 'transportInfo.consigneeAddress';
+    this.setData({
+      [prop]: e.detail,
+    });
+  },
+
   formSubmit(e) {
     let canSubmit = true;
     let errmsg = '';
     if (!app.globalData.sessionInfo.sessionId) {
-      canSend = false;
+      canSubmit = false;
       errmsg += 'SessionInfo错误\r\n'
     }
     if (!this.data.transportInfo.plateNumber || this.data.transportInfo.plateNumber == '') {
@@ -261,11 +269,19 @@ Page({
       canSubmit = false;
       errmsg += '载重错误\r\n'
     }
+    if (!this.data.transportInfo.consigneeCompany || this.data.transportInfo.consigneeCompany == '') {
+      canSubmit = false;
+      errmsg += '收货公司错误\r\n'
+    }
+    if (!this.data.transportInfo.consigneeAddress || this.data.transportInfo.consigneeAddress == '') {
+      canSubmit = false;
+      errmsg += '收货地址错误\r\n'
+    }
     if (!this.data.plannedDate || this.data.plannedDate == '') {
       canSubmit = false;
       errmsg += '预约日期错误\r\n'
     }
-    if (!this.data.plannedTime || this.data.plannedTime == 0) {
+    if (!this.data.plannedTime || this.data.plannedTime == '') {
       canSubmit = false;
       errmsg += '预约时间错误\r\n'
     }
@@ -281,7 +297,7 @@ Page({
         let transportTime = {
           openId: openId,
           parentId: uid,
-          seq: 1,
+          seq: 10,
           kind: this.data.transportInfo.kind,
           plateNumber: this.data.transportInfo.plateNumber,
           carrier: phone,

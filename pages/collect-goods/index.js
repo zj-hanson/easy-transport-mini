@@ -80,7 +80,8 @@ Page({
     })
     let addressList = app.globalData.addressList.map(item => {
       return {
-        name: item.simpleName,
+        name: item.company,
+        subname: item.address,
         address: item.address
       }
     })
@@ -182,6 +183,13 @@ Page({
     });
   },
 
+  bindConsignorAddressChange(e){
+    let prop = 'transportInfo.consignorAddress';
+    this.setData({
+      [prop]: e.detail,
+    });
+  },
+
   bindPlannedDateTap() {
     this.setData({
       plannedDateShow: true
@@ -252,7 +260,7 @@ Page({
     let canSubmit = true;
     let errmsg = '';
     if (!app.globalData.sessionInfo.sessionId) {
-      canSend = false;
+      canSubmit = false;
       errmsg += 'SessionInfo错误\r\n'
     }
     if (!this.data.transportInfo.plateNumber || this.data.transportInfo.plateNumber == '') {
@@ -263,11 +271,19 @@ Page({
       canSubmit = false;
       errmsg += '载重错误\r\n'
     }
+    if (!this.data.transportInfo.consignorCompany || this.data.transportInfo.consignorCompany == '') {
+      canSubmit = false;
+      errmsg += '发货公司错误\r\n'
+    }
+    if (!this.data.transportInfo.consignorAddress || this.data.transportInfo.consignorAddress == '') {
+      canSubmit = false;
+      errmsg += '发货地址错误\r\n'
+    }
     if (!this.data.plannedDate || this.data.plannedDate == '') {
       canSubmit = false;
       errmsg += '预约日期错误\r\n'
     }
-    if (!this.data.plannedTime || this.data.plannedTime == 0) {
+    if (!this.data.plannedTime || this.data.plannedTime == '') {
       canSubmit = false;
       errmsg += '预约时间错误\r\n'
     }
