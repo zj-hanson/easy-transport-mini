@@ -19,8 +19,10 @@ Page({
     error: false,
     state: 'add',
     plateNumberShow: false,
-    plannedDateShow: false,
-    plannedTimeShow: false,
+    plannedArrivalDateShow: false,
+    plannedArrivalTimeShow: false,
+    plannedDepartureDateShow: false,
+    plannedDepartureTimeShow: false,
     consignorCompanyShow: false,
     consigneeCompanyShow: false,
     transportInfo: {
@@ -34,10 +36,14 @@ Page({
       status: 'B',
       timeList: []
     },
-    plannedDate: moment().format("YYYY-MM-DD"),
-    plannedTime: "07:00",
-    selectedPlannedDate: moment().toDate().getTime(),
+    plannedArrivalDate: moment().format("YYYY-MM-DD"),
+    plannedArrivalTime: "07:00",
+    selectedPlannedArrivalDate: moment().toDate().getTime(),
+    plannedDepartureDate: moment().format("YYYY-MM-DD"),
+    plannedDepartureTime: "08:00",
+    selectedPlannedDepartureDate: moment().toDate().getTime(),
     minPlannedDate: moment().toDate().getTime(),
+    minDepartureTime: '07',
     vehicleOption: [],
     addressOption: [],
   },
@@ -190,44 +196,89 @@ Page({
     });
   },
 
-  bindPlannedDateTap() {
+  bindPlannedArrivalDateTap() {
     this.setData({
-      plannedDateShow: true
+      plannedArrivalDateShow: true
     })
   },
 
-  bindPlannedDateClose() {
+  bindPlannedArrivalDateClose() {
     this.setData({
-      plannedDateShow: false
+      plannedArrivalDateShow: false
     })
   },
 
-  bindPlannedDateConfirm(e) {
+  bindPlannedArrivalDateConfirm(e) {
     // console.log(e);
     this.setData({
-      plannedDate: moment(e.detail).format("yyyy-MM-DD"),
-      plannedDateShow: false,
-      selectedPlannedDate: e.detail
+      plannedArrivalDate: moment(e.detail).format("yyyy-MM-DD"),
+      plannedArrivalDateShow: false,
+      selectedPlannedArrivalDate: e.detail,
+      plannedDepartureDate: moment(e.detail).format("yyyy-MM-DD"),
+      selectedPlannedDepartureDate: e.detail,
     })
   },
 
-  bindPlannedTimeTap() {
+  bindPlannedArrivalTimeTap() {
     this.setData({
-      plannedTimeShow: true
+      plannedArrivalTimeShow: true
     })
   },
 
-  bindPlannedTimeClose() {
+  bindPlannedArrivalTimeClose() {
     this.setData({
-      plannedTimeShow: false
+      plannedArrivalTimeShow: false
     })
   },
 
-  bindPlannedTimeConfirm(e) {
+  bindPlannedArrivalTimeConfirm(e) {
     // console.log(e);
     this.setData({
-      plannedTime: e.detail,
-      plannedTimeShow: false
+      plannedArrivalTime: e.detail,
+      plannedArrivalTimeShow: false,
+      plannedDepartureTime: e.detail,
+      minDepartureTime: e.detail.substring(0, 2),
+    })
+  },
+
+  bindPlannedDepartureDateTap() {
+    this.setData({
+      plannedDepartureDateShow: true
+    })
+  },
+
+  bindPlannedDepartureDateClose() {
+    this.setData({
+      plannedDepartureDateShow: false
+    })
+  },
+
+  bindPlannedDepartureDateConfirm(e) {
+    // console.log(e);
+    this.setData({
+      plannedDepartureDate: moment(e.detail).format("yyyy-MM-DD"),
+      plannedDepartureDateShow: false,
+      selectedPlannedDepartureDate: e.detail
+    })
+  },
+
+  bindPlannedDepartureTimeTap() {
+    this.setData({
+      plannedDepartureTimeShow: true
+    })
+  },
+
+  bindPlannedDepartureTimeClose() {
+    this.setData({
+      plannedDepartureTimeShow: false
+    })
+  },
+
+  bindPlannedDepartureTimeConfirm(e) {
+    // console.log(e);
+    this.setData({
+      plannedDepartureTime: e.detail,
+      plannedDepartureTimeShow: false
     })
   },
 
@@ -256,6 +307,13 @@ Page({
     });
   },
 
+  bindConsigneeAddressChange(e) {
+    let prop = 'transportInfo.consigneeAddress';
+    this.setData({
+      [prop]: e.detail,
+    });
+  },
+
   formSubmit(e) {
     let canSubmit = true;
     let errmsg = '';
@@ -279,13 +337,18 @@ Page({
       canSubmit = false;
       errmsg += '发货地址错误\r\n'
     }
-    if (!this.data.plannedDate || this.data.plannedDate == '') {
+    if (!this.data.plannedArrivalDate || this.data.plannedArrivalDate == '') {
       canSubmit = false;
       errmsg += '预约日期错误\r\n'
     }
-    if (!this.data.plannedTime || this.data.plannedTime == '') {
+    if (!this.data.plannedArrivalTime || this.data.plannedArrivalTime == '') {
       canSubmit = false;
       errmsg += '预约时间错误\r\n'
+    }
+    let ret = moment(this.data.plannedArrivalDate + 'T' + this.data.plannedArrivalTime).isBefore(this.data.plannedDepartureDate + 'T' + this.data.plannedDepartureTime);
+    if (!ret) {
+      canSubmit = false;
+      errmsg += '离开时间不能早于抵达时间\r\n'
     }
     if (canSubmit) {
       if (this.data.state == "add") {
@@ -299,14 +362,16 @@ Page({
         let transportTime = {
           openId: openId,
           parentId: uid,
-          seq: 1,
+          seq: 10,
           kind: this.data.transportInfo.kind,
           plateNumber: this.data.transportInfo.plateNumber,
           carrier: phone,
           customer: this.data.transportInfo.consignorCompany,
           address: this.data.transportInfo.consignorAddress,
-          plannedArrivalDate: this.data.plannedDate,
-          plannedArrivalTime: this.data.plannedTime,
+          plannedArrivalDate: this.data.plannedArrivalDate,
+          plannedArrivalTime: this.data.plannedArrivalTime,
+          plannedDepartureDate: this.data.plannedDepartureDate,
+          plannedDepartureTime: this.data.plannedDepartureTime,
           status: 'B',
         }
         this.setData({
