@@ -18,8 +18,10 @@ Page({
     error: false,
     state: 'add',
     plateNumberShow: false,
-    plannedDateShow: false,
-    plannedTimeShow: false,
+    plannedArrivalDateShow: false,
+    plannedArrivalTimeShow: false,
+    plannedDepartureDateShow: false,
+    plannedDepartureTimeShow: false,
     consignorCompanyShow: false,
     consigneeCompanyShow: false,
     transportInfo: {
@@ -190,7 +192,6 @@ Page({
       [prop]: e.detail,
     });
   },
-
 
   bindPlannedArrivalDateTap() {
     this.setData({

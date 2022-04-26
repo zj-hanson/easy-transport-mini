@@ -17,12 +17,16 @@ Page({
     submit: true,
     error: false,
     state: 'add',
-    plannedDateShow: false,
-    plannedTimeShow: false,
+    plannedArrivalDateShow: false,
+    plannedArrivalTimeShow: false,
+    plannedDepartureDateShow: false,
+    plannedDepartureTimeShow: false,
     transportTime: null,
     uid: null,
-    selectedPlannedDate: moment().toDate().getTime(),
+    selectedPlannedArrivalDate: moment().toDate().getTime(),
+    selectedPlannedDepartureDate: moment().toDate().getTime(),
     minPlannedDate: moment().toDate().getTime(),
+    minDepartureTime: '07',
   },
 
   /**
@@ -89,47 +93,138 @@ Page({
 
   },
 
-  bindPlannedDateTap() {
+  bindPlannedArrivalDateTap() {
     this.setData({
-      plannedDateShow: true
+      plannedArrivalDateShow: true
     })
   },
 
-  bindPlannedDateClose() {
+  bindPlannedArrivalDateClose() {
     this.setData({
-      plannedDateShow: false
+      plannedArrivalDateShow: false
     })
   },
 
-  bindPlannedDateConfirm(e) {
+  bindPlannedArrivalDateConfirm(e) {
     // console.log(e);
-    let prop = 'transportTime.plannedArrivalDate';
+    let plannedArrivalDate = 'transportTime.plannedArrivalDate';
+    let plannedDepartureDate = 'transportTime.plannedDepartureDate';
     this.setData({
-      [prop]: moment(e.detail).format("yyyy-MM-DD"),
-      plannedDateShow: false,
-      selectedPlannedDate: e.detail
-    });
-  },
-
-  bindPlannedTimeTap() {
-    this.setData({
-      plannedTimeShow: true
+      [plannedArrivalDate]: moment(e.detail).format("yyyy-MM-DD"),
+      plannedArrivalDateShow: false,
+      selectedPlannedArrivalDate: e.detail,
+      [plannedDepartureDate]: moment(e.detail).format("yyyy-MM-DD"),
+      selectedPlannedDepartureDate: e.detail,
     })
   },
 
-  bindPlannedTimeClose() {
+  bindPlannedArrivalTimeTap() {
     this.setData({
-      plannedTimeShow: false
+      plannedArrivalTimeShow: true
     })
   },
 
-  bindPlannedTimeConfirm(e) {
+  bindPlannedArrivalTimeClose() {
+    this.setData({
+      plannedArrivalTimeShow: false
+    })
+  },
+
+  bindPlannedArrivalTimeConfirm(e) {
     // console.log(e);
-    let prop = 'transportTime.plannedArrivalTime';
+    let plannedArrivalTime = 'transportTime.plannedArrivalTime';
+    let plannedDepartureTime = 'transportTime.plannedDepartureTime';
     this.setData({
-      [prop]: e.detail,
-      plannedTimeShow: false
-    });
+      [plannedArrivalTime]: e.detail,
+      plannedArrivalTimeShow: false,
+      [plannedDepartureTime]: e.detail,
+      minDepartureTime: e.detail.substring(0, 2),
+    })
+  },
+
+  bindPlannedDepartureDateTap() {
+    this.setData({
+      plannedDepartureDateShow: true
+    })
+  },
+
+  bindPlannedDepartureDateClose() {
+    this.setData({
+      plannedDepartureDateShow: false
+    })
+  },
+
+  bindPlannedDepartureDateConfirm(e) {
+    // console.log(e);
+    let plannedDepartureDate = 'transportTime.plannedDepartureDate';
+    this.setData({
+      [plannedDepartureDate]: moment(e.detail).format("yyyy-MM-DD"),
+      plannedDepartureDateShow: false,
+      selectedPlannedDepartureDate: e.detail
+    })
+  },
+
+  bindPlannedDepartureTimeTap() {
+    this.setData({
+      plannedDepartureTimeShow: true
+    })
+  },
+
+  bindPlannedDepartureTimeClose() {
+    this.setData({
+      plannedDepartureTimeShow: false
+    })
+  },
+
+  bindPlannedDepartureTimeConfirm(e) {
+    // console.log(e);
+    let plannedDepartureTime = 'transportTime.plannedDepartureTime';
+    this.setData({
+      [plannedDepartureTime]: e.detail,
+      plannedDepartureTimeShow: false
+    })
+  },
+
+  formSubmit(e) {
+    let canSubmit = true;
+    let errmsg = '';
+    if (!app.globalData.sessionInfo.sessionId) {
+      canSend = false;
+      errmsg += 'SessionInfo错误\r\n'
+    }
+    if (!this.data.transportTime.plannedArrivalDate ||
+      this.data.transportTime.plannedArrivalDate == '') {
+      canSubmit = false;
+      errmsg += '预约日期错误\r\n'
+    }
+    if (!this.data.transportTime.plannedArrivalTime ||
+      this.data.transportTime.plannedArrivalTime == '') {
+      canSubmit = false;
+      errmsg += '预约时间错误\r\n'
+    }
+    let ret = moment(this.data.transportTime.plannedArrivalDate + 'T' + this.data.transportTime.plannedArrivalTime).isBefore(this.data.transportTime.plannedDepartureDate + 'T' + this.data.transportTime.plannedDepartureTime);
+    if (!ret) {
+      canSubmit = false;
+      errmsg += '离开时间不能早于抵达时间\r\n'
+    }
+    if (canSubmit) {
+      if (this.data.state == "edit") {
+        this.handleUpdate(this.data.transportTime);
+      }
+    } else {
+      wx.showModal({
+        title: '系统提示',
+        content: errmsg,
+        showCancel: false
+      })
+    }
+    this.setData({
+      error: !canSubmit
+    })
+  },
+
+  formReset() {
+    // console.log('form发生了reset事件');
   },
 
   handleRetrieveTransportTime: function (uid) {
@@ -163,43 +258,6 @@ Page({
         })
       }
     })
-  },
-
-  formSubmit(e) {
-    let canSubmit = true;
-    let errmsg = '';
-    if (!app.globalData.sessionInfo.sessionId) {
-      canSend = false;
-      errmsg += 'SessionInfo错误\r\n'
-    }
-    if (!this.data.transportTime.plannedArrivalDate ||
-      this.data.transportTime.plannedArrivalDate == '') {
-      canSubmit = false;
-      errmsg += '预约日期错误\r\n'
-    }
-    if (!this.data.transportTime.plannedArrivalTime ||
-      this.data.transportTime.plannedArrivalTime == '') {
-      canSubmit = false;
-      errmsg += '预约时间错误\r\n'
-    }
-    if (canSubmit) {
-      if (this.data.state == "edit") {
-        this.handleUpdate(this.data.transportTime);
-      }
-    } else {
-      wx.showModal({
-        title: '系统提示',
-        content: errmsg,
-        showCancel: false
-      })
-    }
-    this.setData({
-      error: !canSubmit
-    })
-  },
-
-  formReset() {
-    // console.log('form发生了reset事件');
   },
 
   handleUpdate: function (fields) {

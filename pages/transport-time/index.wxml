@@ -5,25 +5,39 @@
   </view>
   <view class="card">
     <van-cell-group>
-      <van-cell title="{{transportTime.kind}}" value="{{transportTime.plateNumber}}" size="large" border="{{ false }}" />
+      <van-cell value="{{transportTime.plateNumber}}" size="large" border="{{ false }}">
+        <van-tag slot="icon" type="warning" size="large">{{transportTime.kind}}</van-tag>
+      </van-cell>
       <van-cell title="{{transportTime.customer}}" border="{{ false }}" />
     </van-cell-group>
     <form bindsubmit="formSubmit" bindreset="formReset">
-      <van-field label="预约日期" required value="{{transportTime.plannedArrivalDate}}" id='plannedDate' use-button-slot readonly bindtap='bindPlannedDateTap'>
-        <van-icon slot="button" name="arrow" bindtap='bindPlannedDateTap' />
+      <van-field label="预约抵达" required value="{{transportTime.plannedArrivalDate}}" use-button-slot readonly bindtap='bindPlannedArrivalDateTap'>
+        <van-icon slot="button" name="arrow" bindtap='bindPlannedArrivalDateTap' />
       </van-field>
-      <van-field label="预约时间" required value="{{transportTime.plannedArrivalTime}}" id='plannedTime' use-button-slot readonly bindtap='bindPlannedTimeTap'>
-        <van-icon slot="button" name="arrow" bindtap="bindPlannedTimeTap" />
+      <van-field label="抵达时间" required value="{{transportTime.plannedArrivalTime}}" use-button-slot readonly bindtap='bindPlannedArrivalTimeTap'>
+        <van-icon slot="button" name="arrow" bindtap="bindPlannedArrivalTimeTap" />
+      </van-field>
+      <van-field label="预计离开" required value="{{transportTime.plannedDepartureDate}}" use-button-slot readonly bindtap='bindPlannedDepartureDateTap'>
+        <van-icon slot="button" name="arrow" bindtap='bindPlannedDepartureDateTap' />
+      </van-field>
+      <van-field label="离开时间" required value="{{transportTime.plannedDepartureTime}}" use-button-slot readonly bindtap='bindPlannedDepartureTimeTap'>
+        <van-icon slot="button" name="arrow" bindtap="bindPlannedDepartureTimeTap" />
       </van-field>
       <van-cell-group>
         <van-button form-type="{{submit ? 'submit' : ''}}" type="primary" round block>保存</van-button>
       </van-cell-group>
     </form>
-    <van-popup show="{{plannedDateShow}}" position="bottom" bind:close="bindPlannedDateClose">
-      <van-datetime-picker type="date" value="{{selectedPlannedDate}}" min-date="{{ minPlannedDate }}" bind:cancel="bindPlannedDateClose" bind:confirm="bindPlannedDateConfirm" />
+    <van-popup show="{{plannedArrivalDateShow}}" position="bottom" bind:close="bindPlannedArrivalDateClose">
+      <van-datetime-picker type="date" value="{{selectedPlannedArrivalDate}}" min-date="{{ minPlannedDate }}" bind:cancel="bindPlannedArrivalDateClose" bind:confirm="bindPlannedArrivalDateConfirm" />
     </van-popup>
-    <van-popup show="{{plannedTimeShow}}" position="bottom" bind:close="bindPlannedTimeClose">
-      <van-datetime-picker type="time" value="{{transportTime.plannedArrivalTime }} " bind:cancel="bindPlannedTimeClose" bind:confirm="bindPlannedTimeConfirm" />
+    <van-popup show="{{plannedArrivalTimeShow}}" position="bottom" bind:close="bindPlannedArrivalTimeClose">
+      <van-datetime-picker type="time" value="{{plannedArrivalTime }} " bind:cancel="bindPlannedArrivalTimeClose" bind:confirm="bindPlannedArrivalTimeConfirm" />
+    </van-popup>
+    <van-popup show="{{plannedDepartureDateShow}}" position="bottom" bind:close="bindPlannedDepartureDateClose">
+      <van-datetime-picker type="date" value="{{selectedPlannedDepartureDate}}" min-date="{{ minPlannedDate }}" bind:cancel="bindPlannedDepartureDateClose" bind:confirm="bindPlannedDepartureDateConfirm" />
+    </van-popup>
+    <van-popup show="{{plannedDepartureTimeShow}}" position="bottom" bind:close="bindPlannedDepartureTimeClose">
+      <van-datetime-picker type="time" value="{{plannedDepartureTime }}" min-hour="{{ minDepartureTime }}" bind:cancel="bindPlannedDepartureTimeClose" bind:confirm="bindPlannedDepartureTimeConfirm" />
     </van-popup>
   </view>
 </view>

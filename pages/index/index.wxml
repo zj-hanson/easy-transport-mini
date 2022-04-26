@@ -31,7 +31,7 @@
               <van-tag slot="icon" type="warning" mark="true">{{item.kind}}</van-tag>
             </van-cell>
             <van-cell title="{{item.consigneeCompany}}" label="{{item.consigneeAddress}}" border="{{ false }}" wx:if="{{item.consigneeCompany}}">
-              <van-tag slot="right-icon" type="primary">收</van-tag>
+              <van-tag slot="right-icon" type="success">收</van-tag>
             </van-cell>
           </van-cell-group>
         </block>
