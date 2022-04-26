@@ -1,23 +1,38 @@
 // pages/booking/booking.js
 import moment from '../../utils/moment.min.js';
 
+var app = getApp();
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    show: false,
+    queryDateShow: false,
+    queryCompanyShow: false,
     minDate: moment().subtract(1, 'months').toDate().getTime(),
     maxDate: moment().add(1, 'months').toDate().getTime(),
     queryDate: moment().format("YYYY-MM-DD"),
+    queryCompany: null,
+    queryAddress: null,
+    addressOption: [],
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    let addressList = app.globalData.addressList.map(item => {
+      return {
+        name: item.company,
+        subname: item.address,
+        address: item.address
+      }
+    })
+    this.setData({
+      addressOption: addressList,
+    })
   },
 
   /**
@@ -86,6 +101,28 @@ Page({
       show: false,
       queryDate: moment(event.detail).format("YYYY-MM-DD"),
     });
-  }
+  },
+
+  bindQueryCompanyTap() {
+    this.setData({
+      queryCompanyShow: true,
+    })
+  },
+
+  onQueryCompanyClose() {
+    this.setData({
+      queryCompanyShow: false
+    })
+  },
+
+  onQueryCompanySelect(e) {
+    this.setData({
+      queryCompany: e.detail.name,
+      queryAddress: e.detail.address,
+    });
+    this.setData({
+      queryCompanyShow: false
+    });
+  },
 
 })
