@@ -21,14 +21,14 @@
         <block wx:if="{{transportInfoList.length > 0}}">
           <van-cell-group inset class="card-title" wx:for="{{transportInfoList}}" wx:for-item="item" wx:key="uid">
             <van-cell title="{{item.plateNumber}}" data-id="{{item.uid}}" size="large" border="{{ false }}" capture-bind:longpress="bindRemoveTransportInfo">
-              <van-icon slot="right-icon" name="delete-o" data-id="{{item.uid}}" bindtap="bindRemoveTransportInfo" />
+              <van-icon slot="right-icon" name="delete-o" data-id="{{item.uid}}" size="large" bindtap="bindRemoveTransportInfo" />
             </van-cell>
             <van-cell title="{{item.consignorCompany}}" label="{{item.consignorAddress}}" border="{{ false }}" wx:if="{{item.consignorCompany}}">
               <van-tag slot="right-icon" type="primary">发</van-tag>
             </van-cell>
             <van-cell title="{{item.plannedArrivalDate}}T{{item.plannedArrivalTime}}" data-id="{{item.uid}}" capture-bind:longpress="" wx:for="{{item.timeList}}" wx:key="uid" border="{{ false }}">
-              <van-icon slot="right-icon" name="edit" data-id="{{item.uid}}" bindtap="bindEditTransportTime" />
-              <van-tag slot="icon" type="warning" mark="true">{{item.kind}}</van-tag>
+              <van-icon slot="right-icon" name="edit" data-id="{{item.uid}}" size="large" bindtap="bindEditTransportTime" />
+              <van-tag slot="icon" type="warning" mark="true" size="large" >{{item.kind}}</van-tag>
             </van-cell>
             <van-cell title="{{item.consigneeCompany}}" label="{{item.consigneeAddress}}" border="{{ false }}" wx:if="{{item.consigneeCompany}}">
               <van-tag slot="right-icon" type="success">收</van-tag>

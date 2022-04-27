@@ -51,7 +51,7 @@
     <van-cell class="card-title" title="拉送地址" />
     <van-cell-group inset wx:for="{{addressList}}" wx:for-item="item" wx:key="uid">
       <van-cell title="{{item.company}}" label="{{item.address}}" data-index="{{index}}" capture-bind:longpress="bindRemoveDeliveryAddress">
-        <van-icon slot="right-icon" name="edit" data-index="{{index}}" bindtap="bindEditDeliveryAddress" />
+        <van-icon slot="right-icon" name="edit" data-index="{{index}}" size="large" bindtap="bindEditDeliveryAddress" />
       </van-cell>
     </van-cell-group>
     <van-cell class="card-title" title="车辆信息" />
