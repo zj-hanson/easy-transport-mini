@@ -1,0 +1,32 @@
+<!--pages/booking/booking.wxml-->
+<view class="container">
+  <view class="card">
+    <van-cell-group>
+      <van-field label="查询日期" required value="{{queryDate}}" use-button-slot readonly border="{{false}}" bindtap='bindQueryDateTap'>
+        <van-icon slot="button" name="search" />
+      </van-field>
+      <van-field label="查询公司" value="{{queryCompany}}" required readonly border="{{false}}" bindtap="bindQueryCompanyTap" use-button-slot>
+        <van-icon slot="button" name="search" bindtap="bindQueryCompanyTap" />
+      </van-field>
+      <van-field label="查询地址" value="{{queryAddress}}" type="textarea" required autosize border="{{false}}" custom-style="height:80px" bind:change="bindConsigneeAddressChange" />
+    </van-cell-group>
+  </view>
+  <view class="card">
+    <block wx:if="{{transportTimeList.length > 0}}">
+      <van-cell-group inset class="card-title" wx:for="{{transportTimeList}}" wx:for-item="item" wx:key="uid">
+        <van-cell value="{{item.plateNumber}}" data-id="{{item.uid}}" size="large" border="{{ false }}">
+          <van-tag slot="icon" type="warning" size="large">{{item.kind}}</van-tag>
+        </van-cell>
+        <van-cell title="{{item.plannedArrivalDate}}T{{item.plannedArrivalTime}}">
+          <van-tag slot="right-icon" type="primary">抵达</van-tag>
+        </van-cell>
+        <van-cell title="{{item.plannedDepartureDate}}T{{item.plannedDepartureTime}}">
+          <van-tag slot="right-icon" type="success">离开</van-tag>
+        </van-cell>
+      </van-cell-group>
+    </block>
+    <van-empty description="暂时没有" wx:else />
+  </view>
+  <van-calendar show="{{queryDateShow}}" first-day-of-week="{{ 1 }}" min-date="{{ minDate }}" max-date="{{ maxDate }}" bind:close="onQueryDateCalendarClose" bind:confirm="onQueryDateCalendarConfirm" />
+  <van-action-sheet title="选择公司" show="{{ queryCompanyShow }}" actions="{{ addressOption }}" bind:close="onQueryCompanyClose" bind:select="onQueryCompanySelect" />
+</view>

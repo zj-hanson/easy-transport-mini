@@ -13,10 +13,7 @@ Page({
       'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
     ],
     menu: [{
-      id: 'menu01',
-      name: '发票',
-      imgUrl: '../../images/task.png',
-      url: '/pages/profile/profile'
+
     }, ],
     indicatorDots: false,
     autoplay: true,

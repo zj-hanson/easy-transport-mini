@@ -37,7 +37,7 @@
   },
   "pages": [
     "pages/index/index",
-    "pages/booking/booking",
+    "pages/booking-status/index",
     "pages/profile/profile",
     "pages/profile/delivery-address/index",
     "pages/profile/vehicle-info/index",
@@ -56,8 +56,8 @@
         "selectedIconPath": "images/home_click.png"
       },
       {
-        "pagePath": "pages/booking/booking",
-        "text": "预约",
+        "pagePath": "pages/booking-status/index",
+        "text": "查询",
         "iconPath": "images/task.png",
         "selectedIconPath": "images/task_click.png"
       },

@@ -16,6 +16,8 @@ Page({
     queryDate: moment().format("YYYY-MM-DD"),
     queryCompany: null,
     queryAddress: null,
+    transportTimeList: [],
+    transportTimeCount: 0,
     addressOption: [],
   },
 
@@ -23,16 +25,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let addressList = app.globalData.addressList.map(item => {
-      return {
-        name: item.company,
-        subname: item.address,
-        address: item.address
-      }
-    })
-    this.setData({
-      addressOption: addressList,
-    })
+
   },
 
   /**
@@ -46,7 +39,16 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    let addressList = app.globalData.addressList.map(item => {
+      return {
+        name: item.company,
+        subname: item.address,
+        address: item.address
+      }
+    })
+    this.setData({
+      addressOption: addressList,
+    })
   },
 
   /**
@@ -84,22 +86,22 @@ Page({
 
   },
 
-  bindPickerDateTap() {
+  bindQueryDateTap() {
     this.setData({
-      show: true,
+      queryDateShow: true,
     })
   },
 
   onQueryDateCalendarClose() {
     this.setData({
-      show: false,
+      queryDateShow: false,
     })
   },
 
   onQueryDateCalendarConfirm(event) {
     this.setData({
-      show: false,
       queryDate: moment(event.detail).format("YYYY-MM-DD"),
+      queryDateShow: false,
     });
   },
 
@@ -119,10 +121,40 @@ Page({
     this.setData({
       queryCompany: e.detail.name,
       queryAddress: e.detail.address,
+      queryCompanyShow: false,
     });
-    this.setData({
-      queryCompanyShow: false
-    });
+    if (e.detail.name) {
+      this.handleRetrieveTransportTime(this.data.queryDate, e.detail.name);
+    }
   },
+
+  handleRetrieveTransportTime(argDate, argCompany) {
+    let url = app.globalData.baseUrl + '/transport-info/mini-program/transport-time/pagination/' + 'f;plannedArrivalDate=' + argDate + ';customer=' + argCompany + '/s;plannedArrivalTime=ASC'
+    wx.request({
+      url: url,
+      data: {
+        offset: 0,
+        pageSize: 100,
+        equal: true,
+        session: app.globalData.sessionInfo.sessionId,
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      method: 'GET',
+      success: res => {
+         console.log(res);
+        if (res.statusCode == 200) {
+          this.setData({
+            transportTimeList: res.data.data,
+            transportTimeCount: res.data.count,
+          });
+        }
+      },
+      fail: fail => {
+        console.log(fail)
+      }
+    })
+  }
 
 })
