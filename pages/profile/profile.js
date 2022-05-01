@@ -310,7 +310,7 @@ Page({
               canSubmit: false,
               sessionInfo: res.data.object,
             })
-            wx.setStorageSync('EasyBookingWechatUser', this.data.object)
+            wx.setStorageSync('easy-transport-miniprg', this.data.object)
           } else {
             app.globalData.sessionInfo.authorized = false;
           }

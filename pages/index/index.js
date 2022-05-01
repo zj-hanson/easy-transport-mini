@@ -63,6 +63,12 @@ Page({
     }
   },
 
+  onShow: function () {
+    this.setData({
+      authorized: app.globalData.sessionInfo.authorized
+    })
+  },
+
   onPullDownRefresh: function () {
     // console.log("onPullDownRefresh");
     this.handleRetrieveTransportInfo(app.globalData.sessionInfo.sessionId, "B");
