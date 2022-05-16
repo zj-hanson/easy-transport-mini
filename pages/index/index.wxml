@@ -1,8 +1,8 @@
 <!--index.wxml-->
-<swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" circular="true">
+<swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" circular="true" >
   <block wx:for="{{imgUrls}}" wx:key="index">
-    <swiper-item>
-      <image style="width: 100%;" src="{{item}}" class="slide-image" mode="scaleToFill" />
+    <swiper-item class="swipeHeight">
+      <image src="{{item}}" class="slide-image" mode="scaleToFix" />
     </swiper-item>
   </block>
 </swiper>
