@@ -18,7 +18,11 @@ Page({
       company: null,
       simpleName: null,
       address: null,
-    }
+      tenantId: null,
+    },
+    tenantAddressShow: false,
+    tenantAddressOption: [],
+    tenantAddressCount: 0,
   },
 
   /**
@@ -37,6 +41,9 @@ Page({
         })
       }
     })
+    if (app.globalData.sessionInfo.sessionId) {
+      this.handleRetrieveTenantAddress(app.globalData.sessionInfo.sessionId);
+    }
   },
 
   /**
@@ -88,6 +95,59 @@ Page({
 
   },
 
+  bindCompanyChange(e) {
+    let company = 'deliveryAddress.company';
+    this.setData({
+      [company]: e.detail
+    })
+  },
+
+  bindTenantAddressTap(e) {
+    this.setData({
+      tenantAddressShow: true
+    })
+  },
+
+  onTenantAddressClose(e) {
+    this.setData({
+      tenantAddressShow: false
+    })
+  },
+
+  onTenantAddressSelect(e) {
+    let company = 'deliveryAddress.company';
+    let address = 'deliveryAddress.address';
+    let simpleName = 'deliveryAddress.simpleName';
+    let tenantId = 'deliveryAddress.tenantId';
+    let contactPerson = 'deliveryAddress.contactPerson';
+    let phone = 'deliveryAddress.phone';
+    this.setData({
+      [company]: e.detail.fullname,
+      [address]: e.detail.subname,
+      [simpleName]: e.detail.name,
+      [tenantId]: e.detail.tenantId,
+      [contactPerson]: e.detail.contactPerson || '',
+      [phone]: e.detail.phone || '',
+    });
+    this.setData({
+      tenantAddressShow: false
+    });
+  },
+
+  bindAddressChange(e) {
+    let address = 'deliveryAddress.address';
+    this.setData({
+      [address]: e.detail
+    })
+  },
+
+  bindSimpleNameChange(e) {
+    let simpleName = 'deliveryAddress.simpleName';
+    this.setData({
+      [simpleName]: e.detail
+    })
+  },
+
   bindContactPersonChange(e) {
     let contactPerson = 'deliveryAddress.contactPerson';
     this.setData({
@@ -101,28 +161,6 @@ Page({
       [phone]: e.detail
     })
   },
-
-  bindCompanyChange(e) {
-    let company = 'deliveryAddress.company';
-    this.setData({
-      [company]: e.detail
-    })
-  },
-
-  bindSimpleNameChange(e) {
-    let simpleName = 'deliveryAddress.simpleName';
-    this.setData({
-      [simpleName]: e.detail
-    })
-  },
-
-  bindAddressChange(e) {
-    let address = 'deliveryAddress.address';
-    this.setData({
-      [address]: e.detail
-    })
-  },
-
   formSubmit(e) {
     let canSubmit = true
     let errmsg = ''
@@ -134,13 +172,13 @@ Page({
       canSubmit = false;
       errmsg += '公司全称错误\r\n'
     }
-    if (!this.data.deliveryAddress.simpleName || this.data.deliveryAddress.simpleName == '') {
-      canSubmit = false;
-      errmsg += '公司简称错误\r\n'
-    }
     if (!this.data.deliveryAddress.address || this.data.deliveryAddress.address == '') {
       canSubmit = false;
       errmsg += '详细地址错误\r\n'
+    }
+    if (!this.data.deliveryAddress.simpleName || this.data.deliveryAddress.simpleName == '') {
+      canSubmit = false;
+      errmsg += '位置错误\r\n'
     }
     if (canSubmit) {
       if (this.data.state == "add") {
@@ -252,7 +290,41 @@ Page({
         })
       }
     })
-  }
+  },
 
+  handleRetrieveTenantAddress(sessionId) {
+    wx.request({
+      url: app.globalData.baseUrl + '/delivery-address/mini-program/tenant-address',
+      data: {
+        session: sessionId
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      method: 'GET',
+      success: res => {
+        // console.log(res);
+        if (res.statusCode == 200) {
+          let tenantList = res.data.data.map(item => {
+            return {
+              name: item.simpleName,
+              subname: item.address,
+              fullname: item.name,
+              tenantId: item.tenantId,
+              contactPerson: item.contactPerson,
+              phone: item.phone,
+            }
+          })
+          this.setData({
+            tenantAddressOption: tenantList,
+            tenantAddressCount: res.data.count,
+          });
+        }
+      },
+      fail: fail => {
+        console.log(fail)
+      }
+    })
+  },
 
 })

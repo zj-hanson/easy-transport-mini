@@ -5,9 +5,11 @@
   </view>
   <view class="card">
     <form bindsubmit="formSubmit" bindreset="formReset">
-      <van-field label="公司全称" value="{{ deliveryAddress.company }}" placeholder="请输入公司全称" required bind:change="bindCompanyChange" />
-      <van-field label="公司简称" value="{{ deliveryAddress.simpleName }}" placeholder="请输入公司简称" required bind:change="bindSimpleNameChange" />
+      <van-field label="公司全称" value="{{ deliveryAddress.company }}" placeholder="请输入公司全称" required bind:change="bindCompanyChange" use-button-slot>
+        <van-icon slot="button" name="search" bindtap="bindTenantAddressTap" />
+      </van-field>
       <van-field label="详细地址" type="textarea" value="{{ deliveryAddress.address }}" placeholder="请输入详细地址" clearable="{{true}}" autosize custom-style="height:100px" required required required bind:change="bindAddressChange" />
+      <van-field label="位置简称" value="{{ deliveryAddress.simpleName }}" placeholder="请输入位置简称" required bind:change="bindSimpleNameChange" />
       <van-field label="联系人" value="{{ deliveryAddress.contactPerson }}" placeholder="请输入联系人" required bind:change="bindContactPersonChange" />
       <van-field label="手机号" value="{{ deliveryAddress.phone }}" placeholder="请输入手机号" required bind:change="bindPhoneChange" />
       <van-cell-group>
@@ -15,4 +17,5 @@
       </van-cell-group>
     </form>
   </view>
+  <van-action-sheet title="地址查询" show="{{ tenantAddressShow }}" actions="{{ tenantAddressOption }}" bind:close="onTenantAddressClose" bind:select="onTenantAddressSelect" />
 </view>
