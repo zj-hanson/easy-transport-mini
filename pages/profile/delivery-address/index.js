@@ -310,11 +310,12 @@ Page({
               name: item.simpleName,
               subname: item.address,
               fullname: item.name,
-              tenantId: item.tenantId,
+              tenantId: item.uid,
               contactPerson: item.contactPerson,
               phone: item.phone,
             }
           })
+          // console.log(tenantList);
           this.setData({
             tenantAddressOption: tenantList,
             tenantAddressCount: res.data.count,

@@ -86,7 +86,8 @@ Page({
       return {
         name: item.company,
         subname: item.address,
-        address: item.address
+        address: item.address,
+        tenantId: item.tenantId,
       }
     })
     this.setData({
@@ -232,9 +233,9 @@ Page({
     // console.log(e);
     this.setData({
       plannedArrivalTime: e.detail,
-      plannedArrivalTimeShow: false,
       plannedDepartureTime: e.detail,
       minDepartureTime: e.detail.substring(0, 2),
+      plannedArrivalTimeShow: false,
     })
   },
 
@@ -254,8 +255,8 @@ Page({
     // console.log(e);
     this.setData({
       plannedDepartureDate: moment(e.detail).format("yyyy-MM-DD"),
+      selectedPlannedDepartureDate: e.detail,
       plannedDepartureDateShow: false,
-      selectedPlannedDepartureDate: e.detail
     })
   },
 
@@ -295,9 +296,11 @@ Page({
     console.log(e);
     let consigneeCompany = 'transportInfo.consigneeCompany';
     let consigneeAddress = 'transportInfo.consigneeAddress';
+    let consigneeTenantId = 'transportInfo.consigneeTenantId';
     this.setData({
       [consigneeCompany]: e.detail.name,
       [consigneeAddress]: e.detail.address,
+      [consigneeTenantId]: e.detail.tenantId,
     });
     this.setData({
       consigneeCompanyShow: false
@@ -366,6 +369,7 @@ Page({
           carrier: phone,
           customer: this.data.transportInfo.consigneeCompany,
           address: this.data.transportInfo.consigneeAddress,
+          tenantId: this.data.transportInfo.consigneeTenantId,
           plannedArrivalDate: this.data.plannedArrivalDate,
           plannedArrivalTime: this.data.plannedArrivalTime,
           plannedDepartureDate: this.data.plannedDepartureDate,

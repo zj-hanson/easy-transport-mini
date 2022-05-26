@@ -6,7 +6,7 @@
   <view class="card">
     <form bindsubmit="formSubmit" bindreset="formReset">
       <van-field label="选择车牌" value="{{ transportInfo.plateNumber }}" placeholder="请输入车牌号" required readonly error="{{error}}" bind:change="bindPlateNumberChange" bindtap="bindPlateNumberTap" use-button-slot>
-        <van-icon slot="button" name="search" bindtap="bindConsigneeCompanyTap" />
+        <van-icon slot="button" name="search" bindtap="" />
       </van-field>
       <van-field label="货物说明" type="textarea" value="{{ transportInfo.content }}" placeholder="请输入运输什么货物" clearable="{{true}}" autosize custom-style="height:100px" required required required bind:change="bindContentChange" />
       <van-field label="发货公司" value="{{transportInfo.consignorCompany}}" required readonly bindtap="bindConsignorCompanyTap" use-button-slot>
