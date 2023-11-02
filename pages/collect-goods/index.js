@@ -88,7 +88,8 @@ Page({
       return {
         name: item.company,
         subname: item.address,
-        address: item.address
+        address: item.address,
+        tenantId: item.tenantId,
       }
     })
     this.setData({
@@ -180,9 +181,11 @@ Page({
     console.log(e);
     let consignorCompany = 'transportInfo.consignorCompany';
     let consignorAddress = 'transportInfo.consignorAddress';
+    let consignorTenantId = 'transportInfo.consignorTenantId';
     this.setData({
       [consignorCompany]: e.detail.name,
       [consignorAddress]: e.detail.address,
+      [consignorTenantId]: e.detail.tenantId,
     });
     this.setData({
       consignorCompanyShow: false
@@ -295,7 +298,7 @@ Page({
   },
 
   onConsigneeCompanySelect(e) {
-    console.log(e);
+    // console.log(e);
     let consigneeCompany = 'transportInfo.consigneeCompany';
     let consigneeAddress = 'transportInfo.consigneeAddress';
     this.setData({
@@ -368,6 +371,7 @@ Page({
           carrier: phone,
           customer: this.data.transportInfo.consignorCompany,
           address: this.data.transportInfo.consignorAddress,
+          tenantId: this.data.transportInfo.consignorTenantId,
           plannedArrivalDate: this.data.plannedArrivalDate,
           plannedArrivalTime: this.data.plannedArrivalTime,
           plannedDepartureDate: this.data.plannedDepartureDate,

@@ -104,7 +104,7 @@ Page({
       queryDateShow: false,
     });
     if (event.detail && this.data.queryCompany) {
-      this.handleRetrieveTransportTime(this.data.queryDate, e.data.queryCompany);
+      this.handleRetrieveTransportTime(this.data.queryDate, this.data.queryCompany);
     }
   },
 
@@ -132,8 +132,7 @@ Page({
   },
 
   handleRetrieveTransportTime(argDate, argCompany) {
-    let url = app.globalData.baseUrl + '/transport-info/mini-program/transport-time/pagination/' + 'f;plannedArrivalDate=' + argDate + ';customer=' + argCompany + '/s;plannedArrivalTime=ASC'
-    console.log(url);
+    let url = app.globalData.baseUrl + '/transport-info/mini-program/transport-time/pagination/' + 'f;plannedArrivalDate=' + argDate + ';customer=' + argCompany + '/s;plannedArrivalTime=ASC';
     wx.request({
       url: url,
       data: {

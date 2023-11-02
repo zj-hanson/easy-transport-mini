@@ -166,7 +166,7 @@ Page({
     console.log(e.detail);
     if (e.detail.errMsg === 'getPhoneNumber:ok') {
       wx.request({
-        url: app.globalData.baseUrl + "/wx52aa1883409dd7de/phone-number",
+        url: app.globalData.baseUrl + "/wx67f3d33b78b2ee91/phone-number",
         data: {
           code: e.detail.code,
           sessionId: app.globalData.sessionInfo.sessionId
@@ -233,7 +233,7 @@ Page({
       }, 60000)
       // 获取校验码
       wx.request({
-        url: app.globalData.baseUrl + '/wx52aa1883409dd7de/check-code',
+        url: app.globalData.baseUrl + '/wx67f3d33b78b2ee91/check-code',
         data: {
           openId: app.globalData.sessionInfo.openId,
           sessionId: app.globalData.sessionInfo.sessionId,
@@ -287,7 +287,7 @@ Page({
       errmsg += '验证码错误\r\n'
     }
     if (canSend) {
-      let url = app.globalData.baseUrl + '/wx52aa1883409dd7de/wechat-user';
+      let url = app.globalData.baseUrl + '/wx67f3d33b78b2ee91/wechat-user';
       wx.request({
         url: url,
         data: {
@@ -310,7 +310,7 @@ Page({
               canSubmit: false,
               sessionInfo: res.data.object,
             })
-            wx.setStorageSync('EasyBookingWechatUser', this.data.object)
+            wx.setStorageSync('easy-transport-miniprg', this.data.object)
           } else {
             app.globalData.sessionInfo.authorized = false;
           }

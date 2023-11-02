@@ -1,1 +1,9 @@
 /**index.wxss**/
+.swipeHeight {
+  height: 270rpx;
+}
+
+.swipeHeight image {
+  height: 100%;
+  width: 100%;
+}
