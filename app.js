@@ -120,7 +120,7 @@ App({
     addressCount: 0,
     vehicleList: [],
     vehicleCount: 0,
-    // baseUrl: 'http://localhost:8083/easy-transport/api',
-    baseUrl: 'https://ssl.shgxxx.cn/easy-transport/api'
+    baseUrl: 'http://localhost:8093/easy-transport/api',
+    // baseUrl: 'http://dev.zj-hanson.com/easy-transport/api'
   }
 })
