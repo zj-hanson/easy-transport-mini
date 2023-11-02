@@ -57,7 +57,7 @@
     <van-cell class="card-title" title="车辆信息" />
     <van-cell-group inset wx:for="{{vehicleList}}" wx:for-item="item" wx:key="uid">
       <van-cell title="{{item.plateNumber}}最大载重{{item.maximumLoad}}T" label="{{item.dimension}}" data-index="{{index}}" capture-bind:longpress="bindRemoveVehicleInfo">
-        <van-icon slot="right-icon" name="edit" data-index="{{index}}" bindtap="bindEditVehicleInfo" />
+        <van-icon slot="right-icon" name="edit" data-index="{{index}}" size="large" bindtap="bindEditVehicleInfo" />
       </van-cell>
     </van-cell-group>
   </block>

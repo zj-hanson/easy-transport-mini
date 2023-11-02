@@ -8,7 +8,7 @@ App({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         wx.request({
-          url: this.globalData.baseUrl + '/wx52aa1883409dd7de/session',
+          url: this.globalData.baseUrl + '/wx67f3d33b78b2ee91/session',
           data: {
             code: res.code
           },
@@ -122,5 +122,6 @@ App({
     vehicleCount: 0,
     baseUrl: 'http://localhost:8093/easy-transport/api',
     // baseUrl: 'http://dev.zj-hanson.com/easy-transport/api'
+
   }
 })
